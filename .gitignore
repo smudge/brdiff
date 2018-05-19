@@ -1,0 +1,6 @@
+*~
+*.o
+*/*.o
+*/*/*.o
+imgpro
+.DS_Store
