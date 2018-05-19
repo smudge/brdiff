@@ -2,7 +2,7 @@
 
 
 
-// Include files 
+// Include files
 
 #include "R2/R2.h"
 #include "R2Pixel.h"
@@ -20,7 +20,7 @@ R2Image::
 R2Image(void)
   : pixels(NULL),
     npixels(0),
-    width(0), 
+    width(0),
     height(0)
 {
 }
@@ -31,7 +31,7 @@ R2Image::
 R2Image(const char *filename)
   : pixels(NULL),
     npixels(0),
-    width(0), 
+    width(0),
     height(0)
 {
   // Read image
@@ -44,7 +44,7 @@ R2Image::
 R2Image(int width, int height)
   : pixels(NULL),
     npixels(width * height),
-    width(width), 
+    width(width),
     height(height)
 {
   // Allocate pixels
@@ -58,15 +58,15 @@ R2Image::
 R2Image(int width, int height, const R2Pixel *p)
   : pixels(NULL),
     npixels(width * height),
-    width(width), 
+    width(width),
     height(height)
 {
   // Allocate pixels
   pixels = new R2Pixel [ npixels ];
   assert(pixels);
 
-  // Copy pixels 
-  for (int i = 0; i < npixels; i++) 
+  // Copy pixels
+  for (int i = 0; i < npixels; i++)
     pixels[i] = p[i];
 }
 
@@ -76,16 +76,16 @@ R2Image::
 R2Image(const R2Image& image)
   : pixels(NULL),
     npixels(image.npixels),
-    width(image.width), 
+    width(image.width),
     height(image.height)
-    
+
 {
   // Allocate pixels
   pixels = new R2Pixel [ npixels ];
   assert(pixels);
 
-  // Copy pixels 
-  for (int i = 0; i < npixels; i++) 
+  // Copy pixels
+  for (int i = 0; i < npixels; i++)
     pixels[i] = image.pixels[i];
 }
 
@@ -115,8 +115,8 @@ operator=(const R2Image& image)
   pixels = new R2Pixel [ npixels ];
   assert(pixels);
 
-  // Copy pixels 
-  for (int i = 0; i < npixels; i++) 
+  // Copy pixels
+  for (int i = 0; i < npixels; i++)
     pixels[i] = image.pixels[i];
 
   // Return image
@@ -174,7 +174,7 @@ Speckle(double percentage)
   // is given by the parameter in the range [0.0..1.0].  0.0 changes no pixels,
   // 1.0 changes all the pixels to a random value (a different random value for each)
   // 0.5 will change half of the pixels.
-  
+
   // Cycle through the pixels
   for (int i = 0; i < width; i++) {
     for (int j = 0;  j < height; j++) {
@@ -207,7 +207,7 @@ void scaleVals(double* red, double* green, double* blue) {
       }
       if (*green > 1) {
         *green = 1;
-      }   
+      }
 
 }
 
@@ -218,19 +218,19 @@ ChangeSaturation(double factor)
   // image and a gray level version of the image.  Interpolation
   // decreases saturation, extrapolation increases it, negative factors
   // preserve luminance  but invert the hue of the input image.
-  
+
   // Cycle through the pixels
   for (int i = 0; i < width; i++) {
     for (int j = 0;  j < height; j++) {
       double luminance = Pixel(i,j).Luminance();
-          
+
       Pixel(i,j).SetRed  ( Pixel(i,j).Red()   * factor + luminance * (1-factor)  );
       Pixel(i,j).SetGreen( Pixel(i,j).Green() * factor + luminance * (1-factor)  );
       Pixel(i,j).SetBlue ( Pixel(i,j).Blue()  * factor + luminance * (1-factor)  );
       Pixel(i,j).Clamp();
     }
   }
-  
+
 }
 
 void R2Image::
@@ -247,13 +247,13 @@ ChangeContrast(double factor)
     for (int y = 0;  y < height; y++) {
       lumsum += Pixel(x,y).Luminance();
     }
-  }  
+  }
   double avelum = lumsum / npixels;
 
   // Cycle through the pixels again, using this value
   for (int i = 0; i < width; i++) {
-    for (int j = 0;  j < height; j++) {  
-          
+    for (int j = 0;  j < height; j++) {
+
       Pixel(i,j).SetRed  ( Pixel(i,j).Red()   * factor + avelum * (1-factor) );
       Pixel(i,j).SetGreen( Pixel(i,j).Green() * factor + avelum * (1-factor) );
       Pixel(i,j).SetBlue ( Pixel(i,j).Blue()  * factor + avelum * (1-factor) );
@@ -324,8 +324,8 @@ BlackAndWhite(void)
 void R2Image::
 ExtractChannel(int channel)
 {
-  // Extracts a channel of an image (e.g., R2_IMAGE_RED_CHANNEL).  
-  // Leaves the specified channel intact, 
+  // Extracts a channel of an image (e.g., R2_IMAGE_RED_CHANNEL).
+  // Leaves the specified channel intact,
   // and sets all the other ones to zero.
 
   // Cycle through the pixels
@@ -361,8 +361,8 @@ ExtractChannel(int channel)
 void R2Image::
 EqualizeLuminanceHistogram(void)
 {
-  // Increase the global contrast by converting to HLS color space, 
-  // applying histogram equalization to the luminance channel, and 
+  // Increase the global contrast by converting to HLS color space,
+  // applying histogram equalization to the luminance channel, and
   // converting back to RGB.
   // See http://en.wikipedia.org/wiki/Histogram_equalization
 
@@ -394,7 +394,7 @@ void Gaussian (R2Pixel *src, int i1, int j1, int wd1, int ht1, R2Pixel *dst, int
           xmult = 1;
           break;
       }
-      
+
       int dst_coord = i2*ht2+j2;
       int src_coord = i1*ht1+j1;
 
@@ -404,18 +404,18 @@ void Gaussian (R2Pixel *src, int i1, int j1, int wd1, int ht1, R2Pixel *dst, int
       // Make use of each window value
       for (int q = 0; q <= w_size; q++) {
         int x = q - (w_size-1)/2;
-        
-        
+
+
         // IF we're not outside of the image: Apply the value stored in "window"
         if ((coord+x >= 0) && (coord+x < stop))
-          dst[dst_coord] += src[src_coord+x*xmult]*w[q]; 
-        
-        
+          dst[dst_coord] += src[src_coord+x*xmult]*w[q];
+
+
         // ELSE: Account for edges
         else if (coord+x < 0)
-          dst[dst_coord] += src[edge0]*w[q]; 
+          dst[dst_coord] += src[edge0]*w[q];
         else if (coord+x >= stop)
-          dst[dst_coord] += src[edge1]*w[q]; 
+          dst[dst_coord] += src[edge1]*w[q];
       }
 
 }
@@ -465,7 +465,7 @@ Sharpen()
   double window[3][3] = {{-1, -1, -1},
                       {-1, 9, -1},
                       {-1, -1,-1}};
-  
+
   // Cycle through the pixels
   for (int i = 0; i < width; i++) {
     for (int j = 0;  j < height; j++) {
@@ -481,7 +481,7 @@ Sharpen()
       pixels2[i*height+j] = ((pixelsum)+Pixel(i,j))/2;
     }
   }
-  
+
   //free up all the pixels (before they attack!)
   if (pixels) delete [] pixels;
   pixels = pixels2;
@@ -492,7 +492,7 @@ void R2Image::
 EdgeDetect(void)
 {
   // Detect edges in an image.
-  
+
   //NOTE, THESE KERNELS ARE BASED AROUND THE SOBEL OPERATOR
   //BUT IS ALSO IN PART A RESULT OF MY OWN EXPERIMENTATION
 
@@ -503,7 +503,7 @@ EdgeDetect(void)
   int window[3][3] = {{-1, 0, 1},
                       {-2, 0, 2},
                       {-1, 0, 1}};
-  
+
   // Cycle through the pixels
   for (int i = 0; i < width; i++) {
     for (int j = 0;  j < height; j++) {
@@ -520,11 +520,11 @@ EdgeDetect(void)
       pixels2[i*height+j] = pixelsum;
     }
   }
-  
+
   int window2[3][3] = {{-1, -2, -1},
                        {0, 0, 0},
                        {1, 2, 1}};
-                  
+
   // Cycle through the pixels
     for (int j = 0;  j < height; j++) {
   for (int i = 0; i < width; i++) {
@@ -541,7 +541,7 @@ EdgeDetect(void)
       Pixel(i,j) = (pixelsum+pixels2[i*height+j])/2;
     }
   }
-  
+
   //free up all the pixels (before they attack!)
   if (pixels2) delete [] pixels2;
 }
@@ -579,7 +579,7 @@ MedianFilter(double window_w) {
 
   // Create the window array
   double window[4][(int)window_w*(int)window_w];
-  
+
   // ITERATE ACROSS ALL PIXELS
   for (int x = 0; x < width; x++) {
     for (int y = 0;  y < height; y++) {
@@ -617,7 +617,7 @@ MedianFilter(double window_w) {
       for (int c = 0; c <= 3; c++)
         qsort(window[c], q, sizeof(double), compare_doubles);
       // set values at medians
-      
+
       pixels2[x*height+y].SetRed  (window[0][window_w_2]);
       pixels2[x*height+y].SetGreen(window[1][window_w_2]);
       pixels2[x*height+y].SetBlue (window[2][window_w_2]);
@@ -670,7 +670,7 @@ R2Pixel R2Image::Sample(double u, double v,  int sampling_method, double sigma){
   }
   else {
     switch (sampling_method) {
-      default: 
+      default:
       case 0: {
         int iu = round(u);
         int iv = round(v);
@@ -689,17 +689,17 @@ R2Pixel R2Image::Sample(double u, double v,  int sampling_method, double sigma){
         double uabv = (fabs(u2-u) == 0) ? 0.5 : fabs(u2-u);
         double vblw = (fabs(v-v1) == 0) ? 0.5 : fabs(v-v1);
         double vabv = (fabs(v2-v) == 0) ? 0.5 : fabs(v2-v);
-        
+
         R2Pixel a = Pixel(u1,v1)*uabv + Pixel(u2,v1)*ublw;
         R2Pixel b = Pixel(u1,v2)*uabv + Pixel(u2,v2)*ublw;
         return (a*vabv + b*vblw);
       }
         break;
       case 2: {
-      
+
         //The size of the blur filter is the inverse of the minification factor, rounded up to the closest odd number greater than or equal to 3.
-      
-        double w = 3; 
+
+        double w = 3;
 
         double ulo = u - w;
         double uhi = u + w;
@@ -707,7 +707,7 @@ R2Pixel R2Image::Sample(double u, double v,  int sampling_method, double sigma){
         double vhi = v + w;
 
 
-                  
+
         //sum up values in window:
         R2Pixel a = R2Pixel();
         double weightsum = 0;
@@ -715,22 +715,22 @@ R2Pixel R2Image::Sample(double u, double v,  int sampling_method, double sigma){
           for (double iv = ceil(vlo); iv <= floor(vhi); iv++) {
 
             double d = sqrt((u-iu)*(u-iu)+(v-iv)*(v-iv));
-            
+
             //printf("(%f,%f)(%f,%f) %f\n",u,v,iu,iv,d);
             int x = iu;
-            int y = iv;          
+            int y = iv;
             solveEdges(&x,&y,height,width);
             double weight = pow(2*PI*pow(sigma,2.0),-1)*pow(E,-(pow(d,2.0)/(2*pow(sigma,2))));
             a += Pixel(x,y) * weight;
-            
+
             //* pow(4,-pow((d/sigma),2));
-            
+
             //printf("pixel: %f, %f | point: %f %f\n", u, v, iu, iv);
             weightsum += weight;
           }
         }
-        
-        
+
+
         return a/weightsum; //normalized
       }
         break;
@@ -744,19 +744,19 @@ Scale(double sx, double sy, int sampling_method) {
   // Scale an image in x by sx, and y by sy.
 
   if ((sx != 1)||(sx != 1)) {
-    
+
     if ((sampling_method == 2)&&(sx<1)&&(sy<1)) {
       Blur(1/((sx+sy)));
       sampling_method = 0;
     }
-    
+
     int dwidth = round(width*sx);
     int dheight = round(height*sy);
-  
+
     // Allocate new pixels to store values
     R2Pixel *pixels2 = new R2Pixel [ dwidth*dheight ];
     assert(pixels2);
-    
+
     for (int x = 0; x < dwidth; x++) {
       for (int y = 0; y < dheight; y++) {
         pixels2[ x*dheight+y ] = Sample(x*1.0/sx,y*1.0/sy,sampling_method, 0.7);
@@ -783,26 +783,26 @@ Rotate(double angle, int sampling_method)
   // Allocate new pixels to store values
   R2Pixel *pixels2 = new R2Pixel [ npixels*7 ];
   assert(pixels2);
-  
+
 
   for (int i = 0; i < width; i++) {
     for (int j = 0; j < height; j++) {
-      
+
       //convert to (0,0) at center
       double x = 2*i-width;
       double y = 2*j-height;
-      //convert to radial coordinates      
+      //convert to radial coordinates
       double r = sqrt(x*x + y*y);
       double phi = atan2(y,x);
       //apply rotation
       phi = phi + angle/180*PI;
-      //convert to cartesian coordinates     
+      //convert to cartesian coordinates
       x = r*cos(phi);
       y = r*sin(phi);
       //convert to (0,0) at usual place
       double i2 = (x + width)/2;
       double j2 = (y + height)/2;
-      
+
       pixels2[i*height+j] = Sample(i2,j2,sampling_method, 0.5);
     }
   }
@@ -811,7 +811,7 @@ Rotate(double angle, int sampling_method)
   //swap the pixel data
   if (pixels) delete [] pixels;
   pixels = pixels2;
-  
+
 }
 
 
@@ -837,18 +837,18 @@ Fun(int sampling_method)
 
   for (int i = 0; i < width; i++) {
     for (int j = 0; j < height; j++) {
-      
+
       //convert to (0,0) at center
       double x = 2*i-width;
       double y = 2*j-height;
-      
+
       //convert to radial coordinates
       double r = sqrt(x*x + y*y);
       double phi = atan2(y,x);
-      
+
       //apply crazy warp
       phi = pow(phi,2);
-      
+
       //convert to cartesian coordinates
       x = r * cos(phi);
       y = r * sin(phi);
@@ -857,7 +857,7 @@ Fun(int sampling_method)
       double i2 = (x + width)/2;
       double j2 = (y + height)/2;
 
-      
+
       pixels2[i*height+j] = Sample(i2,j2,sampling_method, 0.7);
     }
   }
@@ -867,7 +867,7 @@ Fun(int sampling_method)
   if (pixels) delete [] pixels;
   pixels = pixels2;
 
-  
+
 }
 
 
@@ -879,7 +879,7 @@ Quantize (int nbits)
   // Quantizes an image with "nbits" bits per channel.
 
   double factor = (pow(2,nbits)-1);
-  
+
   // Cycle through the pixels
   for (int i = 0; i < width; i++) {
     for (int j = height-1;  j >= 0; j--) {
@@ -894,7 +894,7 @@ Quantize (int nbits)
 
       double old_alp = Pixel(i,j).Alpha();
       double new_alp = round(old_alp*factor)/factor;
-      
+
       Pixel(i,j).SetRed(  new_red);
       Pixel(i,j).SetGreen(new_grn);
       Pixel(i,j).SetBlue( new_blu);
@@ -909,10 +909,10 @@ Quantize (int nbits)
 void R2Image::
 RandomDither(int nbits)
 {
-  // Converts and image to nbits per channel using random dither. 
+  // Converts and image to nbits per channel using random dither.
 
   double factor = (pow(2,nbits)-1);
-  
+
   // Cycle through the pixels
   for (int i = 0; i < width; i++) {
     for (int j = height-1;  j >= 0; j--) {
@@ -927,7 +927,7 @@ RandomDither(int nbits)
 
       double old_alp = Pixel(i,j).Alpha();
       double new_alp = round(old_alp*factor + (rand()*1.0/RAND_MAX)-0.5)/factor;
-      
+
       Pixel(i,j).Reset(new_red,new_grn,new_blu,new_alp);
       Pixel(i,j).Clamp();
     }
@@ -940,7 +940,7 @@ RandomDither(int nbits)
 void R2Image::
 OrderedDither(int nbits)
 {
-  // Converts an image to nbits per channel using ordered dither, 
+  // Converts an image to nbits per channel using ordered dither,
   // with a 4x4 Bayer's pattern matrix.
 
   double factor = (pow(2,nbits)-1);
@@ -948,13 +948,13 @@ OrderedDither(int nbits)
                       {3, 11, 1,  9},
                       {12, 4, 14, 6},
                       {0,  8, 2,  10}};
-                  
+
   for (int i = 0; i < width; i++) {
     for (int j = 0;  j < height; j++) {
 
       int n = i % 4;
       int g = j % 4;
-      
+
       double old_red = Pixel(i,j).Red();
       double new_red = round(old_red * factor - 0.5 + Bayer4[n][g] / 15.0) / factor;
 
@@ -966,7 +966,7 @@ OrderedDither(int nbits)
 
       double old_alp = Pixel(i,j).Alpha();
       double new_alp = round(old_alp * factor - 0.5 + Bayer4[n][g] / 15.0) / factor;
-      
+
       Pixel(i,j).Reset(new_red, new_grn, new_blu, new_alp);
       Pixel(i,j).Clamp();
     }
@@ -989,9 +989,9 @@ FloydSteinbergDither(int nbits)
 {
   // Converts an image to nbits per channel using Floyd-Steinberg dither.
   // with error diffusion.
-  
+
   double factor = (pow(2,nbits)-1);
-  
+
   // Cycle through the pixels
   for (int i = 0; i < width; i++) {
     for (int j = 0;  j < height; j++) {
@@ -1010,10 +1010,10 @@ FloydSteinbergDither(int nbits)
       double old_alp = Pixel(i,j).Alpha();
       double new_alp = round(old_alp*factor)/factor;
       double err_alp = old_alp - new_alp;
-      
+
       Pixel(i,j).Reset(new_red, new_grn, new_blu, new_alp);
       Pixel(i,j).Clamp();
-      
+
       addQuant(pixels, i+1, j,   err_red*7/16, err_grn*7/16, err_blu*7/16, err_alp*7/16, width, height);
       addQuant(pixels, i-1, j+1, err_red*3/16, err_grn*3/16, err_blu*3/16, err_alp*3/16, width, height);
       addQuant(pixels, i,   j+1, err_red*5/16, err_grn*5/16, err_blu*5/16, err_alp*5/16, width, height);
@@ -1030,7 +1030,7 @@ FloydSteinbergDither(int nbits)
 void R2Image::
 Crop(int x, int y, int w, int h)
 {
-  // Extracts a sub image from the image, 
+  // Extracts a sub image from the image,
   // at position (x, y), width w, and height h.
 
   // Allocate new pixels to store values
@@ -1051,10 +1051,10 @@ Crop(int x, int y, int w, int h)
   if (h + y >= height) {
     h = (height - 1) - y;
   }
-  
+
   for (int j = y;  j < h+y; j++) {
     for (int i = x; i < w+x; i++) {
-      
+
       pixels2[(i-x)*h+(j-y)] = Pixel(i,j);
 
     }
@@ -1067,8 +1067,8 @@ Crop(int x, int y, int w, int h)
 
   //swap the pixel data
   if (pixels) delete [] pixels;
-  pixels = pixels2;  
-  
+  pixels = pixels2;
+
 }
 
 void R2Image::
@@ -1083,7 +1083,7 @@ Composite(const R2Image& top, int operation)
 void R2Image::
 CopyChannel(const R2Image& from_image, int from_channel, int to_channel)
 {
-  // Copies one channel of an image (e.g., R2_IMAGE_RED_CHANNEL).  
+  // Copies one channel of an image (e.g., R2_IMAGE_RED_CHANNEL).
   // to another channel
 
   // MAY FILL IN IMPLEMENTATION HERE (REMOVE PRINT STATEMENT WHEN DONE) (NO CREDIT FOR ASSIGNMENT)
@@ -1109,8 +1109,8 @@ Subtract(const R2Image& image)
 }
 
 void R2Image::
-Morph(const R2Image& target, 
-  R2Segment *source_segments, R2Segment *target_segments, int nsegments, 
+Morph(const R2Image& target,
+  R2Segment *source_segments, R2Segment *target_segments, int nsegments,
   double t, int sampling_method)
 {
   // Morph this source image towards a passed target image by t using pairwise line segment correspondences
@@ -1137,13 +1137,13 @@ Read(const char *filename)
     fprintf(stderr, "Input file has no extension (e.g., .jpg).\n");
     return 0;
   }
-  
+
   // Read file of appropriate type
   if (!strncmp(input_extension, ".bmp", 4)) return ReadBMP(filename);
   else if (!strncmp(input_extension, ".ppm", 4)) return ReadPPM(filename);
   else if (!strncmp(input_extension, ".jpg", 4)) return ReadJPEG(filename);
   else if (!strncmp(input_extension, ".jpeg", 5)) return ReadJPEG(filename);
-  
+
   // Should never get here
   fprintf(stderr, "Unrecognized image file extension");
   return 0;
@@ -1160,7 +1160,7 @@ Write(const char *filename) const
     fprintf(stderr, "Input file has no extension (e.g., .jpg).\n");
     return 0;
   }
-  
+
   // Write file of appropriate type
   if (!strncmp(input_extension, ".bmp", 4)) return WriteBMP(filename);
   else if (!strncmp(input_extension, ".ppm", 4)) return WritePPM(filename, 1);
@@ -1229,7 +1229,7 @@ typedef struct tagRGBQUAD {
 
 static unsigned short int WordReadLE(FILE *fp)
 {
-  // Read a unsigned short int from a file in little endian format 
+  // Read a unsigned short int from a file in little endian format
   unsigned short int lsb, msb;
   lsb = getc(fp);
   msb = getc(fp);
@@ -1241,7 +1241,7 @@ static unsigned short int WordReadLE(FILE *fp)
 static void WordWriteLE(unsigned short int x, FILE *fp)
 {
   // Write a unsigned short int to a file in little endian format
-  unsigned char lsb = (unsigned char) (x & 0x00FF); putc(lsb, fp); 
+  unsigned char lsb = (unsigned char) (x & 0x00FF); putc(lsb, fp);
   unsigned char msb = (unsigned char) (x >> 8); putc(msb, fp);
 }
 
@@ -1249,7 +1249,7 @@ static void WordWriteLE(unsigned short int x, FILE *fp)
 
 static unsigned int DWordReadLE(FILE *fp)
 {
-  // Read a unsigned int word from a file in little endian format 
+  // Read a unsigned int word from a file in little endian format
   unsigned int b1 = getc(fp);
   unsigned int b2 = getc(fp);
   unsigned int b3 = getc(fp);
@@ -1261,7 +1261,7 @@ static unsigned int DWordReadLE(FILE *fp)
 
 static void DWordWriteLE(unsigned int x, FILE *fp)
 {
-  // Write a unsigned int to a file in little endian format 
+  // Write a unsigned int to a file in little endian format
   unsigned char b1 = (x & 0x000000FF); putc(b1, fp);
   unsigned char b2 = ((x >> 8) & 0x000000FF); putc(b2, fp);
   unsigned char b3 = ((x >> 16) & 0x000000FF); putc(b3, fp);
@@ -1272,7 +1272,7 @@ static void DWordWriteLE(unsigned int x, FILE *fp)
 
 static int LongReadLE(FILE *fp)
 {
-  // Read a int word from a file in little endian format 
+  // Read a int word from a file in little endian format
   int b1 = getc(fp);
   int b2 = getc(fp);
   int b3 = getc(fp);
@@ -1284,7 +1284,7 @@ static int LongReadLE(FILE *fp)
 
 static void LongWriteLE(int x, FILE *fp)
 {
-  // Write a int to a file in little endian format 
+  // Write a int to a file in little endian format
   char b1 = (x & 0x000000FF); putc(b1, fp);
   char b2 = ((x >> 8) & 0x000000FF); putc(b2, fp);
   char b3 = ((x >> 16) & 0x000000FF); putc(b3, fp);
@@ -1310,14 +1310,14 @@ ReadBMP(const char *filename)
   bmfh.bfReserved1 = WordReadLE(fp);
   bmfh.bfReserved2 = WordReadLE(fp);
   bmfh.bfOffBits = DWordReadLE(fp);
-  
+
   /* Check file header */
   assert(bmfh.bfType == BMP_BF_TYPE);
   /* ignore bmfh.bfSize */
   /* ignore bmfh.bfReserved1 */
   /* ignore bmfh.bfReserved2 */
   assert(bmfh.bfOffBits == BMP_BF_OFF_BITS);
-  
+
   /* Read info header */
   BITMAPINFOHEADER bmih;
   bmih.biSize = DWordReadLE(fp);
@@ -1331,8 +1331,8 @@ ReadBMP(const char *filename)
   bmih.biYPelsPerMeter = LongReadLE(fp);
   bmih.biClrUsed = DWordReadLE(fp);
   bmih.biClrImportant = DWordReadLE(fp);
-  
-  // Check info header 
+
+  // Check info header
   assert(bmih.biSize == BMP_BI_SIZE);
   assert(bmih.biWidth > 0);
   assert(bmih.biHeight > 0);
@@ -1359,7 +1359,7 @@ ReadBMP(const char *filename)
     return 0;
   }
 
-  // Read buffer 
+  // Read buffer
   fseek(fp, (long) bmfh.bfOffBits, SEEK_SET);
   if (fread(buffer, 1, bmih.biSizeImage, fp) != bmih.biSizeImage) {
     fprintf(stderr, "Error while reading BMP file %s", filename);
@@ -1412,7 +1412,7 @@ WriteBMP(const char *filename) const
   int rowsize = 3 * width;
   if ((rowsize % 4) != 0) rowsize = (rowsize / 4 + 1) * 4;
 
-  // Write file header 
+  // Write file header
   BITMAPFILEHEADER bmfh;
   bmfh.bfType = BMP_BF_TYPE;
   bmfh.bfSize = BMP_BF_OFF_BITS + rowsize * height;
@@ -1425,7 +1425,7 @@ WriteBMP(const char *filename) const
   WordWriteLE(bmfh.bfReserved2, fp);
   DWordWriteLE(bmfh.bfOffBits, fp);
 
-  // Write info header 
+  // Write info header
   BITMAPINFOHEADER bmih;
   bmih.biSize = BMP_BI_SIZE;
   bmih.biWidth = width;
@@ -1469,12 +1469,12 @@ WriteBMP(const char *filename) const
     // Pad row
     for (int i = 0; i < pad; i++) fputc(0, fp);
   }
-  
+
   // Close file
   fclose(fp);
 
   // Return success
-  return 1;  
+  return 1;
 }
 
 
@@ -1515,7 +1515,7 @@ ReadPPM(const char *filename)
     fclose(fp);
     return 0;
   }
-	
+
   // Read max value
   double max_value;
   if (fscanf(fp, "%lf", &max_value) != 1) {
@@ -1523,7 +1523,7 @@ ReadPPM(const char *filename)
     fclose(fp);
     return 0;
   }
-	
+
   // Allocate image pixels
   pixels = new R2Pixel [ width * height ];
   if (!pixels) {
@@ -1538,7 +1538,7 @@ ReadPPM(const char *filename)
     int c = getc(fp);
     if (!isspace(c)) putc(c, fp);
 
-    // Read raw image data 
+    // Read raw image data
     // First ppm pixel is top-left, so read in opposite scan-line order
     for (int j = height-1; j >= 0; j--) {
       for (int i = 0; i < width; i++) {
@@ -1551,7 +1551,7 @@ ReadPPM(const char *filename)
     }
   }
   else {
-    // Read asci image data 
+    // Read asci image data
     // First ppm pixel is top-left, so read in opposite scan-line order
     for (int j = height-1; j >= 0; j--) {
       for (int i = 0; i < width; i++) {
@@ -1594,7 +1594,7 @@ WritePPM(const char *filename, int ascii) const
       return 0;
     }
 
-    // Print PPM image file 
+    // Print PPM image file
     // First ppm pixel is top-left, so write in opposite scan-line order
     fprintf(fp, "P3\n");
     fprintf(fp, "%d %d\n", width, height);
@@ -1622,8 +1622,8 @@ WritePPM(const char *filename, int ascii) const
       fprintf(stderr, "Unable to open image file: %s", filename);
       return 0;
     }
-    
-    // Print PPM image file 
+
+    // Print PPM image file
     // First ppm pixel is top-left, so write in opposite scan-line order
     fprintf(fp, "P6\n");
     fprintf(fp, "%d %d\n", width, height);
@@ -1637,13 +1637,13 @@ WritePPM(const char *filename, int ascii) const
         fprintf(fp, "%c%c%c", r, g, b);
       }
     }
-    
+
     // Close file
     fclose(fp);
   }
 
   // Return success
-  return 1;  
+  return 1;
 }
 
 
@@ -1655,7 +1655,7 @@ WritePPM(const char *filename, int ascii) const
 
 // #define USE_JPEG
 #ifdef USE_JPEG
-  extern "C" { 
+  extern "C" {
 #   define XMD_H // Otherwise, a conflict with INT32
 #   undef FAR // Otherwise, a conflict with windows.h
 #   include "jpeg/jpeglib.h"
@@ -1709,7 +1709,7 @@ ReadJPEG(const char *filename)
     return 0;
   }
 
-  // Read scan lines 
+  // Read scan lines
   // First jpeg pixel is top-left, so read pixels in opposite scan-line order
   while (cinfo.output_scanline < cinfo.output_height) {
     int scanline = cinfo.output_height - cinfo.output_scanline - 1;
@@ -1771,7 +1771,7 @@ ReadJPEG(const char *filename)
 }
 
 
-	
+
 
 int R2Image::
 WriteJPEG(const char *filename) const
@@ -1799,7 +1799,7 @@ WriteJPEG(const char *filename) const
   cinfo.optimize_coding = TRUE;
   jpeg_set_quality(&cinfo, 75, TRUE);
   jpeg_start_compress(&cinfo, TRUE);
-	
+
   // Allocate unsigned char buffer for reading image
   int rowsize = 3 * width;
   if ((rowsize % 4) != 0) rowsize = (rowsize / 4 + 1) * 4;
@@ -1855,4 +1855,3 @@ WriteJPEG(const char *filename) const
   return 0;
 #endif
 }
-

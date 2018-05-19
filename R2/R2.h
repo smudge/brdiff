@@ -8,7 +8,7 @@
 #pragma warning(disable:4996)
 #endif
 
-// Standard dependency include files 
+// Standard dependency include files
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,8 +1,8 @@
-// Include file for the R2 vector class 
+// Include file for the R2 vector class
 
 
 
-// Class definition 
+// Class definition
 
 class R2Vector {
  public:
@@ -74,7 +74,7 @@ class R2Vector {
 
 
 
-// Public variables 
+// Public variables
 
 extern R2Vector R2null_vector;
 extern R2Vector R2ones_vector;
@@ -88,7 +88,7 @@ extern R2Vector R2negy_vector;
 
 
 
-// Inline functions 
+// Inline functions
 
 inline double R2Vector::
 X (void) const
@@ -118,7 +118,7 @@ operator[] (int dim) const
 
 
 inline double& R2Vector::
-operator[] (int dim) 
+operator[] (int dim)
 {
   // Return X (dim=0) or Y (dim=1) coordinate
   return v[dim];
@@ -207,7 +207,7 @@ Cross(const R2Vector& vector) const
 
 
 inline void R2Vector::
-SetX (double x) 
+SetX (double x)
 {
   // Set X coord
   v[0] = x;
@@ -216,7 +216,7 @@ SetX (double x)
 
 
 inline void R2Vector::
-SetY (double y) 
+SetY (double y)
 {
   // Set Y coord
   v[1] = y;
@@ -225,7 +225,7 @@ SetY (double y)
 
 
 inline void R2Vector::
-SetCoord (int dim, double coord) 
+SetCoord (int dim, double coord)
 {
   // Set coord
   assert ((dim>=0)&&(dim<=1));
@@ -235,7 +235,7 @@ SetCoord (int dim, double coord)
 
 
 inline void R2Vector::
-Reset(double x, double y) 
+Reset(double x, double y)
 {
   // Set all coords
   v[0] = x;
@@ -244,12 +244,9 @@ Reset(double x, double y)
 
 
 
-inline R2Vector 
-operator*(double a, const R2Vector& vector) 
+inline R2Vector
+operator*(double a, const R2Vector& vector)
 {
   // Commute scaling
   return (vector * a);
 }
-
-
-

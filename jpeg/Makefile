@@ -2,14 +2,9 @@
 # Makefile for JPEG library
 #
 
-libjpeg.a: 
+libjpeg.a:
 	cd linux-src; make
 	cp linux-src/libjpeg.a .
 
-clean: 
+clean:
 	cd linux-src; make clean
-
-
-
-
-

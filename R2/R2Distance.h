@@ -1,8 +1,8 @@
-// Include file for R2 distance utility 
+// Include file for R2 distance utility
 
 
 
-// Function declarations 
+// Function declarations
 
 double R2Distance(const R2Point& point1, const R2Point& point2);
 double R2Distance(const R2Point& point, const R2Line& line);
@@ -52,6 +52,3 @@ inline double R2SignedDistance(const R2Point& point, const R2Line& line)
   // Distance is commutative
   return R2Distance(line, point);
 }
-
-
-

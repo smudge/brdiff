@@ -99,8 +99,8 @@ class R2Image {
   void Add(const R2Image& image);
   void Subtract(const R2Image& image);
   void Composite(const R2Image& top, int operation);
-  void Morph(const R2Image& target, 
-    R2Segment *source_segments, R2Segment *target_segments, int nsegments, 
+  void Morph(const R2Image& target,
+    R2Segment *source_segments, R2Segment *target_segments, int nsegments,
     double t, int sampling_method);
 
   // File reading/writing
@@ -169,7 +169,7 @@ Pixel(int x, int y)
 inline R2Pixel *R2Image::
 Pixels(void)
 {
-  // Return pointer to pixels for whole image 
+  // Return pointer to pixels for whole image
   // (pixels start at lower-left and go in row-major order)
   return pixels;
 }
@@ -187,7 +187,7 @@ Pixels(int x)
 
 
 inline R2Pixel *R2Image::
-operator[](int x) 
+operator[](int x)
 {
   // Return pixels pointer for row at x
   return Pixels(x);

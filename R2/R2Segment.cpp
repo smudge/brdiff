@@ -1,8 +1,8 @@
-// Source file for the R2 segment class 
+// Source file for the R2 segment class
 
 
 
-// Include files 
+// Include files
 
 #include "R2.h"
 

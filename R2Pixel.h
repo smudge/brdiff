@@ -1,9 +1,9 @@
-// Include file for the pixel class 
+// Include file for the pixel class
 #ifndef R2_PIXEL_INCLUDED
 #define R2_PIXEL_INCLUDED
 
 
-// Class definition 
+// Class definition
 
 class R2Pixel {
  public:
@@ -45,7 +45,7 @@ class R2Pixel {
   R2Pixel& operator*=(const R2Pixel& pixel);
   R2Pixel& operator*=(double scale);
   R2Pixel& operator/=(double scale);
- 
+
   // Arithmetic operations
   friend R2Pixel operator+(const R2Pixel& pixel1, const R2Pixel& pixel2);
   friend R2Pixel operator-(const R2Pixel& pixel1, const R2Pixel& pixel2);
@@ -60,7 +60,7 @@ class R2Pixel {
 
 
 
-// Public variables 
+// Public variables
 
 extern R2Pixel R2null_pixel;
 extern R2Pixel R2black_pixel;
@@ -74,7 +74,7 @@ extern R2Pixel R2white_pixel;
 
 
 
-// Inline functions 
+// Inline functions
 
 inline double R2Pixel::
 Red(void) const
@@ -139,7 +139,7 @@ operator[](int i) const
 
 
 inline double& R2Pixel::
-operator[] (int i) 
+operator[] (int i)
 {
   assert((i>=0)&&(i<=3));
   return(c[i]);
@@ -238,7 +238,7 @@ Clamp(double maximum_value)
 
 
 
-inline R2Pixel 
+inline R2Pixel
 operator+(const R2Pixel& pixel1, const R2Pixel& pixel2)
 {
   // Add rgb components of two pixels
@@ -251,7 +251,7 @@ operator+(const R2Pixel& pixel1, const R2Pixel& pixel2)
 
 
 
-inline R2Pixel 
+inline R2Pixel
 operator-(const R2Pixel& pixel1, const R2Pixel& pixel2)
 {
   // Subtract rgb components of two pixels
@@ -264,7 +264,7 @@ operator-(const R2Pixel& pixel1, const R2Pixel& pixel2)
 
 
 
-inline R2Pixel 
+inline R2Pixel
 operator*(const R2Pixel& pixel1, const R2Pixel& pixel2)
 {
   // Multiply rgb components of two pixels
@@ -277,7 +277,7 @@ operator*(const R2Pixel& pixel1, const R2Pixel& pixel2)
 
 
 
-inline R2Pixel 
+inline R2Pixel
 operator*(const R2Pixel& pixel, double scale)
 {
   // Scale rgb components by scalar
@@ -290,7 +290,7 @@ operator*(const R2Pixel& pixel, double scale)
 
 
 
-inline R2Pixel 
+inline R2Pixel
 operator*(double scale, const R2Pixel& pixel)
 {
   return pixel * scale;
@@ -298,7 +298,7 @@ operator*(double scale, const R2Pixel& pixel)
 
 
 
-inline R2Pixel 
+inline R2Pixel
 operator/(const R2Pixel& pixel, double scale)
 {
   // Divide rgb components by scalar

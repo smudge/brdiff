@@ -1,14 +1,14 @@
-// Source file for the R2 line class 
+// Source file for the R2 line class
 
 
 
-// Include files 
+// Include files
 
 #include "R2.h"
 
 
 
-// Public variables 
+// Public variables
 
 R2Line R2null_line(0.0, 0.0, 0.0);
 R2Line R2posx_line(0.0, -1.0, 0.0);

@@ -2,7 +2,7 @@
 
 
 
-// Class definition 
+// Class definition
 
 class R2Segment {
  public:
@@ -43,7 +43,7 @@ class R2Segment {
 
   // Print functions
   void Print(FILE *fp = stdout) const;
-	
+
  private:
   // Internal data
   R2Line line;
@@ -56,7 +56,7 @@ class R2Segment {
 /* Inline functions */
 
 inline R2Point& R2Segment::
-operator[] (int k) 
+operator[] (int k)
 {
   // Return kth endpoint of segment
   assert((k>=0)&&(k<=1));
@@ -106,7 +106,7 @@ End (void) const
 inline R2Vector R2Segment::
 Vector(void) const
 {
-  // Return direction vector of segment 
+  // Return direction vector of segment
   return line.Vector();
 }
 
@@ -115,7 +115,7 @@ Vector(void) const
 inline R2Vector R2Segment::
 Normal(void) const
 {
-  // Return normal vector of segment 
+  // Return normal vector of segment
   return line.Normal();
 }
 
@@ -194,6 +194,3 @@ operator!=(const R2Segment& segment) const
   // Return whether segment is not equal
   return (!(*this == segment));
 }
-
-
-

@@ -1,8 +1,8 @@
-// Source file for the R2Pixel class 
+// Source file for the R2Pixel class
 
 
 
-// Include files 
+// Include files
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +16,7 @@
 
 
 
-// Public variables 
+// Public variables
 
 R2Pixel R2null_pixel(0.0, 0.0, 0.0, 1.0);
 R2Pixel R2black_pixel(0.0, 0.0, 0.0, 1.0);
@@ -30,14 +30,14 @@ R2Pixel R2white_pixel(1.0, 1.0, 1.0, 1.0);
 
 
 
-// Public functions 
+// Public functions
 
 R2Pixel::
 R2Pixel(void)
 {
   // Initialize components to zero
-  c[0] = 0; 
-  c[1] = 0; 
+  c[0] = 0;
+  c[1] = 0;
   c[2] = 0;
   c[3] = 0;
 }
@@ -47,7 +47,7 @@ R2Pixel(void)
 R2Pixel::
 R2Pixel(const R2Pixel& pixel)
 {
-  // Copy components 
+  // Copy components
   c[0] = pixel.c[0];
   c[1] = pixel.c[1];
   c[2] = pixel.c[2];
@@ -59,9 +59,9 @@ R2Pixel(const R2Pixel& pixel)
 R2Pixel::
 R2Pixel(double red, double green, double blue, double alpha)
 {
-  // Set components 
-  c[0] = red; 
-  c[1] = green; 
+  // Set components
+  c[0] = red;
+  c[1] = green;
   c[2] = blue;
   c[3] = alpha;
 }
@@ -71,9 +71,9 @@ R2Pixel(double red, double green, double blue, double alpha)
 R2Pixel::
 R2Pixel(const double rgba[4])
 {
-  // Set components 
-  c[0] = rgba[0]; 
-  c[1] = rgba[1]; 
+  // Set components
+  c[0] = rgba[0];
+  c[1] = rgba[1];
   c[2] = rgba[2];
   c[3] = rgba[3];
 }
@@ -158,14 +158,9 @@ operator*=(double a)
 R2Pixel& R2Pixel::
 operator/=(double a)
 {
-  //  assert(!zero(a)); 
+  //  assert(!zero(a));
   c[0] /= a;
   c[1] /= a;
   c[2] /= a;
   return *this;
 }
-
-
-
-
-

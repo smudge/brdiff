@@ -57,7 +57,7 @@ static char options[] =
 
 
 
-static void 
+static void
 ShowUsage(void)
 {
   // Print usage message and exit
@@ -68,7 +68,7 @@ ShowUsage(void)
 
 
 
-static void 
+static void
 CheckOption(char *option, int argc, int minargc)
 {
   // Check if there are enough remaining arguments for option
@@ -81,7 +81,7 @@ CheckOption(char *option, int argc, int minargc)
 
 
 
-static int 
+static int
 ReadCorrespondences(char *filename, R2Segment *&source_segments, R2Segment *&target_segments, int& nsegments)
 {
   // Open file
@@ -110,14 +110,14 @@ ReadCorrespondences(char *filename, R2Segment *&source_segments, R2Segment *&tar
 
     // Read source segment
     double sx1, sy1, sx2, sy2;
-    if (fscanf(fp, "%lf%lf%lf%lf", &sx1, &sy1, &sx2, &sy2) != 4) { 
+    if (fscanf(fp, "%lf%lf%lf%lf", &sx1, &sy1, &sx2, &sy2) != 4) {
       fprintf(stderr, "Error reading correspondence %d out of %d\n", i, nsegments);
       exit(-1);
     }
 
     // Read target segment
     double tx1, ty1, tx2, ty2;
-    if (fscanf(fp, "%lf%lf%lf%lf", &tx1, &ty1, &tx2, &ty2) != 4) { 
+    if (fscanf(fp, "%lf%lf%lf%lf", &tx1, &ty1, &tx2, &ty2) != 4) {
       fprintf(stderr, "Error reading correspondence %d out of %d\n", i, nsegments);
       exit(-1);
     }
@@ -136,7 +136,7 @@ ReadCorrespondences(char *filename, R2Segment *&source_segments, R2Segment *&tar
 
 
 
-int 
+int
 main(int argc, char **argv)
 {
   // Look for help
@@ -149,8 +149,8 @@ main(int argc, char **argv)
   // Read input and output image filenames
   if (argc < 3)  ShowUsage();
   argv++, argc--; // First argument is program name
-  char *input_image_name = *argv; argv++, argc--; 
-  char *output_image_name = *argv; argv++, argc--; 
+  char *input_image_name = *argv; argv++, argc--;
+  char *output_image_name = *argv; argv++, argc--;
 
   // Allocate image
   R2Image *image = new R2Image();
@@ -168,7 +168,7 @@ main(int argc, char **argv)
   // Initialize sampling method
   int sampling_method = R2_IMAGE_POINT_SAMPLING;
 
-  // Parse arguments and perform operations 
+  // Parse arguments and perform operations
   while (argc > 0) {
     if (!strcmp(*argv, "-noise")) {
       CheckOption(*argv, argc, 2);
@@ -246,7 +246,7 @@ main(int argc, char **argv)
       double sy = atof(argv[2]);
       argv += 3, argc -= 3;
       image->BilateralFilter(sy, sx);
-    } 
+    }
     else if (!strcmp(*argv, "-quantize")) {
       CheckOption(*argv, argc, 2);
       int nbits = atoi(argv[1]);
@@ -353,6 +353,3 @@ main(int argc, char **argv)
   // Return success
   return EXIT_SUCCESS;
 }
-
-
-

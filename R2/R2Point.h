@@ -1,8 +1,8 @@
-// Include file for the R2 point class 
+// Include file for the R2 point class
 
 
 
-// Class definition 
+// Class definition
 
 class R2Point {
  public:
@@ -125,7 +125,7 @@ IsZero(void) const
 
 
 inline void R2Point::
-SetX (double x) 
+SetX (double x)
 {
   // Set X coord
   v[0] = x;
@@ -134,7 +134,7 @@ SetX (double x)
 
 
 inline void R2Point::
-SetY (double y) 
+SetY (double y)
 {
   // Set Y coord
   v[1] = y;
@@ -143,7 +143,7 @@ SetY (double y)
 
 
 inline void R2Point::
-SetCoord (int dim, double coord) 
+SetCoord (int dim, double coord)
 {
   // Set coord
   assert ((dim>=0)&&(dim<=1));
@@ -153,7 +153,7 @@ SetCoord (int dim, double coord)
 
 
 inline void R2Point::
-Reset(double x, double y) 
+Reset(double x, double y)
 {
   // Set all coords
   v[0] = x;
@@ -163,7 +163,7 @@ Reset(double x, double y)
 
 
 inline void R2Point::
-Translate (const R2Vector& vector) 
+Translate (const R2Vector& vector)
 {
   // Move point by vector
   *this += vector;
@@ -186,6 +186,3 @@ operator!=(const R2Point& point) const
     // Return whether point is not equal
     return ((v[0] != point.v[0]) || (v[1] != point.v[1]));
 }
-
-
-

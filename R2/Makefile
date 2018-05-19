@@ -20,7 +20,7 @@ INCS=$(HSRCS) $(CCSRCS:.cpp=.h)
 #
 
 CC=g++
-CPPFLAGS=-Wall -g -I. -DUSE_JPEG 
+CPPFLAGS=-Wall -g -I. -DUSE_JPEG
 LDFLAGS=-g
 
 
@@ -43,4 +43,3 @@ $(LIB): $(OBJS)
 
 clean:
 	    -  rm -f *~ *.o *.obj *.pdb $(LIB)
-

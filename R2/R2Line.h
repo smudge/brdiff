@@ -1,8 +1,8 @@
-// Include file for the R2 line class 
+// Include file for the R2 line class
 
 
 
-// Class definition 
+// Class definition
 
 class R2Line {
  public:
@@ -36,7 +36,7 @@ class R2Line {
 
   // Arithmetic functions/operators
   R2Line operator-(void);
-	
+
   // Output functions
   void Print(FILE *fp = stdout) const;
 
@@ -48,7 +48,7 @@ class R2Line {
 
 
 
-// Public variables 
+// Public variables
 
 extern R2Line R2null_line;
 extern R2Line R2posx_line;
@@ -60,7 +60,7 @@ extern R2Line R2negy_line;
 
 
 
-// Inline functions 
+// Inline functions
 
 inline double R2Line::
 A(void) const
@@ -120,7 +120,7 @@ Vector(void) const
 inline R2Vector R2Line::
 Normal(void) const
 {
-  // Return normal vector of line 
+  // Return normal vector of line
   // This vector is counterclockwise by 90 degrees with respect to direction vector
   return normal;
 }
@@ -144,6 +144,3 @@ operator!=(const R2Line& line) const
   // Return whether line is not equal
   return (!(*this == line));
 }
-
-
-

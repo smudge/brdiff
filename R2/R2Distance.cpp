@@ -1,8 +1,8 @@
-// Source file for R2 distance utility 
+// Source file for R2 distance utility
 
 
 
-// Include files 
+// Include files
 
 #include "R2.h"
 
@@ -21,7 +21,7 @@ double R2Distance(const R2Point& point1, const R2Point& point2)
 
 double R2Distance(const R2Point& point, const R2Line& line)
 {
-  // Return distance from point to line 
+  // Return distance from point to line
   double d = point.X() * line.A() + point.Y() * line.B() + line.C();
   return (d < 0.0) ? -d : d;
 }
@@ -51,7 +51,7 @@ double R2Distance(const R2Point& point, const R2Segment& segment)
 
 double R2Distance(const R2Line& line1, const R2Line& line2)
 {
-  // Return distance from line to line 
+  // Return distance from line to line
   if (line1.Vector() != line2.Vector()) return 0;
   else return fabs(line1.C() - line2.C());
 }
@@ -80,5 +80,3 @@ double R2SignedDistance(const R2Line& line, const R2Point& point)
   // Return signed distance from line to point
   return line.A() * point.X() + line.B() * point.Y() + line.C();
 }
-
-
