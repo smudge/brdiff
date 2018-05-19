@@ -1,7 +1,6 @@
 *~
 *.o
-*/*.o
-*/*/*.o
+*.a
 imgpro
 .DS_Store
 tmp/
