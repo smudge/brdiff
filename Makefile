@@ -36,7 +36,7 @@ LIBS=R2/libR2.a jpeg/libjpeg.a
 #
 
 %.o: %.cpp
-	    $(CC) $(CPPFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) -c $< -o $@
 
 
 
@@ -47,13 +47,15 @@ LIBS=R2/libR2.a jpeg/libjpeg.a
 all: $(LIBS) imgpro
 
 imgpro: $(LIB) $(IMGPRO_OBJS)
-	    $(CC) -o imgpro $(CPPFLAGS) $(LDFLAGS) $(IMGPRO_OBJS) $(LIBS) -lm
+	$(CC) -o imgpro $(CPPFLAGS) $(LDFLAGS) $(IMGPRO_OBJS) $(LIBS) -lm
 
 R2/libR2.a:
-	    cd R2; make
+	cd R2; make
 
 jpeg/libjpeg.a:
-	    cd jpeg; make
+	cd jpeg; make
 
 clean:
-	    -  rm -f *~ *.o */*.o */*/*.o imgpro $(LIBS)
+	find . -type f -name '*.o' -delete
+	find . -type f -name '*.a' -delete
+	rm -f imgpro
