@@ -24,45 +24,11 @@
 #include "R2Image.h"
 
 
-
-// Program arguments
-
-static char options[] =
-"  -help\n"
-"  -noise <real:factor>\n"
-"  -saturation <real:factor>\n"
-"  -contrast <real:factor>\n"
-"  -threshold <real:minvalue>\n"
-"  -gamma <real:exponent>\n"
-"  -blackandwhite \n"
-"  -equalize\n"
-"  -speckle <real:percentage>\n"
-"  -brightness <real:factor>\n"
-"  -crop <int:x> <int:y> <int:width> <int:height>\n"
-"  -extract <int:channel (0=red,1=green,2=blue,3=alpha)>\n"
-"  -quantize <int:nbits>\n"
-"  -dither <int:method(0=random,1=ordered,2=FloydSteinberg)> <int:nbits>\n"
-"  -blur <real:sigma>\n"
-"  -sharpen \n"
-"  -edge \n"
-"  -median <real:width>\n"
-"  -bilateral <real:domain> <real:range>\n"
-"  -scale <real:sx> <real:sy>\n"
-"  -rotate <real:angle(in radians)> \n"
-"  -motionblur <real:dx> <real:dy> \n"
-"  -fun\n"
-"  -composite <file:top_image> <file:bottom_mask> <file:top_mask> <int:operation(0=over)>\n"
-"  -morph <file:target_image> <file:segment_correspondences> <real:t>\n"
-"  -sampling <int:method (0=point,1=linear,2=Gaussian)>\n";
-
-
-
 static void
 ShowUsage(void)
 {
   // Print usage message and exit
-  fprintf(stderr, "Usage: imgpro input_image output_image [  -option [arg ...] ...]\n");
-  fprintf(stderr, options);
+  fprintf(stderr, "Usage: imgpro input_image_1 input_image_2 output_image");
   exit(EXIT_FAILURE);
 }
 
@@ -149,206 +115,47 @@ main(int argc, char **argv)
   // Read input and output image filenames
   if (argc < 3)  ShowUsage();
   argv++, argc--; // First argument is program name
-  char *input_image_name = *argv; argv++, argc--;
+  char *input_image_1_name = *argv; argv++, argc--;
+  char *input_image_2_name = *argv; argv++, argc--;
   char *output_image_name = *argv; argv++, argc--;
 
   // Allocate image
-  R2Image *image = new R2Image();
-  if (!image) {
+  R2Image *image1 = new R2Image();
+  if (!image1) {
     fprintf(stderr, "Unable to allocate image\n");
     exit(-1);
   }
 
   // Read input image
-  if (!image->Read(input_image_name)) {
-    fprintf(stderr, "Unable to read image from %s\n", input_image_name);
+  if (!image1->Read(input_image_1_name)) {
+    fprintf(stderr, "Unable to read image from %s\n", input_image_1_name);
     exit(-1);
   }
 
-  // Initialize sampling method
-  int sampling_method = R2_IMAGE_POINT_SAMPLING;
-
-  // Parse arguments and perform operations
-  while (argc > 0) {
-    if (!strcmp(*argv, "-noise")) {
-      CheckOption(*argv, argc, 2);
-      double factor = atof(argv[1]);
-      argv += 2, argc -= 2;
-      image->AddNoise(factor);
-    }
-    else if (!strcmp(*argv, "-brightness")) {
-      CheckOption(*argv, argc, 2);
-      double factor = atof(argv[1]);
-      argv += 2, argc -=2;
-      image->Brighten(factor);
-    }
-    else if (!strcmp(*argv, "-speckle")) {
-      CheckOption(*argv, argc, 2);
-      double percentage = atof(argv[1]);
-      argv += 2, argc -= 2;
-      image->Speckle(percentage);
-    }
-    else if (!strcmp(*argv, "-saturation")) {
-      CheckOption(*argv, argc, 2);
-      double factor = atof(argv[1]);
-      argv += 2, argc -= 2;
-      image->ChangeSaturation(factor);
-    }
-    else if (!strcmp(*argv, "-contrast")) {
-      CheckOption(*argv, argc, 2);
-      double factor = atof(argv[1]);
-      argv += 2, argc -= 2;
-      image->ChangeContrast(factor);
-    }
-    else if (!strcmp(*argv, "-threshold")) {
-      CheckOption(*argv, argc, 2);
-      double factor = atof(argv[1]);
-      argv += 2, argc -= 2;
-      image->Threshold(factor);
-    }
-    else if (!strcmp(*argv, "-gamma")) {
-      CheckOption(*argv, argc, 2);
-      double factor = atof(argv[1]);
-      argv += 2, argc -= 2;
-      image->ApplyGamma(factor);
-    }
-    else if (!strcmp(*argv, "-blackandwhite")) {
-      argv++, argc--;
-      image->BlackAndWhite();
-    }
-    else if (!strcmp(*argv, "-equalize")) {
-      argv++, argc--;
-      image->EqualizeLuminanceHistogram();
-    }
-    else if (!strcmp(*argv, "-blur")) {
-      CheckOption(*argv, argc, 2);
-      double sigma = atof(argv[1]);
-      argv += 2, argc -= 2;
-      image->Blur(sigma);
-    }
-    else if (!strcmp(*argv, "-sharpen")) {
-      argv++, argc--;
-      image->Sharpen();
-    }
-    else if (!strcmp(*argv, "-edge")) {
-      argv++, argc--;
-      image->EdgeDetect();
-    }
-    else if (!strcmp(*argv, "-median")) {
-      CheckOption(*argv, argc, 2);
-      double sigma = atof(argv[1]);
-      argv += 2, argc -= 2;
-      image->MedianFilter(sigma);
-    }
-    else if (!strcmp(*argv, "-bilateral")) {
-      CheckOption(*argv, argc, 3);
-      double sx = atof(argv[1]);
-      double sy = atof(argv[2]);
-      argv += 3, argc -= 3;
-      image->BilateralFilter(sy, sx);
-    }
-    else if (!strcmp(*argv, "-quantize")) {
-      CheckOption(*argv, argc, 2);
-      int nbits = atoi(argv[1]);
-      argv += 2, argc -= 2;
-      image->Quantize(nbits);
-    }
-    else if (!strcmp(*argv, "-dither")) {
-      CheckOption(*argv, argc, 3);
-      int dither_method = atoi(argv[1]);
-      int nbits = atoi(argv[2]);
-      argv += 3, argc -= 3;
-      if (dither_method == 0) image->RandomDither(nbits);
-      else if (dither_method == 1) image->OrderedDither(nbits);
-      else if (dither_method == 2) image->FloydSteinbergDither(nbits);
-      else { fprintf(stderr, "Invalid dither method: %d\n", dither_method); exit(-1); }
-    }
-    else if (!strcmp(*argv, "-scale")) {
-      CheckOption(*argv, argc, 3);
-      double sx = atof(argv[1]);
-      double sy = atof(argv[2]);
-      argv += 3, argc -= 3;
-      image->Scale(sx, sy, sampling_method);
-    }
-    else if (!strcmp(*argv, "-rotate")) {
-      CheckOption(*argv, argc, 2);
-      double angle = atof(argv[1]);
-      argv += 2, argc -= 2;
-      image->Rotate(angle, sampling_method);
-    }
-    else if (!strcmp(*argv, "-motionblur")) {
-      CheckOption(*argv, argc, 3);
-      double dx = atof(argv[1]);
-      double dy = atof(argv[2]);
-      argv += 3, argc -= 3;
-      R2Vector motion(dx, dy);
-      image->MotionBlur(motion, sampling_method);
-    }
-    else if (!strcmp(*argv, "-fun")) {
-      image->Fun(sampling_method);
-      argv++, argc--;
-    }
-    else if (!strcmp(*argv, "-crop")) {
-      CheckOption(*argv, argc, 5);
-      int x = atoi(argv[1]);
-      int y = atoi(argv[2]);
-      int w = atoi(argv[3]);
-      int h = atoi(argv[4]);
-      argv += 5, argc -= 5;
-      image->Crop(x, y, w, h);
-    }
-    else if (!strcmp(*argv, "-extract")) {
-      CheckOption(*argv, argc, 2);
-      int channel = atoi(argv[1]);
-      argv += 2, argc -= 2;
-      image->ExtractChannel(channel);
-    }
-    else if (!strcmp(*argv, "-composite")) {
-      CheckOption(*argv, argc, 5);
-      R2Image *top_image = new R2Image(argv[2]);
-      R2Image *bottom_mask = new R2Image(argv[1]);
-      R2Image *top_mask = new R2Image(argv[3]);
-      int operation = atoi(argv[4]);
-      argv += 5, argc -= 5;
-      image->CopyChannel(*bottom_mask, R2_IMAGE_BLUE_CHANNEL, R2_IMAGE_ALPHA_CHANNEL);
-      top_image->CopyChannel(*top_mask, R2_IMAGE_BLUE_CHANNEL, R2_IMAGE_ALPHA_CHANNEL);
-      image->Composite(*top_image, operation);
-      delete top_image;
-      delete bottom_mask;
-      delete top_mask;
-    }
-    else if (!strcmp(*argv, "-morph")) {
-      int nsegments = 0;
-      R2Segment *source_segments = NULL;
-      R2Segment *target_segments = NULL;
-      CheckOption(*argv, argc, 4);
-      R2Image *target_image = new R2Image(argv[1]);
-      ReadCorrespondences(argv[2], source_segments, target_segments, nsegments);
-      double t = atof(argv[3]);
-      argv += 4, argc -= 4;
-      image->Morph(*target_image, source_segments, target_segments, nsegments, t, sampling_method);
-      delete target_image;
-    }
-    else if (!strcmp(*argv, "-sampling")) {
-      CheckOption(*argv, argc, 2);
-      sampling_method = atoi(argv[1]);
-      argv += 2, argc -= 2;
-    }
-    else {
-      // Unrecognized program argument
-      fprintf(stderr, "image: invalid option: %s\n", *argv);
-      ShowUsage();
-    }
+  // Allocate image
+  R2Image *image2 = new R2Image();
+  if (!image2) {
+    fprintf(stderr, "Unable to allocate image\n");
+    exit(-1);
   }
 
+  // Read input image
+  if (!image2->Read(input_image_2_name)) {
+    fprintf(stderr, "Unable to read image from %s\n", input_image_2_name);
+    exit(-1);
+  }
+
+  image1->Subtract(*image2);
+
   // Write output image
-  if (!image->Write(output_image_name)) {
+  if (!image1->Write(output_image_name)) {
     fprintf(stderr, "Unable to read image from %s\n", output_image_name);
     exit(-1);
   }
 
   // Delete image
-  delete image;
+  delete image1;
+  delete image2;
 
   // Return success
   return EXIT_SUCCESS;

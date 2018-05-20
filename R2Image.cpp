@@ -1102,10 +1102,37 @@ Add(const R2Image& image)
 void R2Image::
 Subtract(const R2Image& image)
 {
-  // Subtract passed image from this image.
+  if ((width != image.width) || (height != image.height)) {
+    fprintf(stderr, "Image height and width do not match\n");
+  }
 
-  // MAY FILL IN IMPLEMENTATION HERE (REMOVE PRINT STATEMENT WHEN DONE) (NO CREDIT FOR ASSIGNMENT)
-  fprintf(stderr, "Subtract not implemented\n");
+  for (int i = 0; i < width; i++) {
+    for (int j = 0;  j < height; j++) {
+      const R2Pixel& pixel = (*this)[i][j];
+      if ((pixel.Red() != pixel.Blue()) || (pixel.Red() != pixel.Green())) {
+        fprintf(stderr, "Pixel values not the same across all color channels!\n");
+      }
+
+      const R2Pixel& pixel2 = (image)[i][j];
+      if ((pixel2.Red() != pixel2.Blue()) || (pixel2.Red() != pixel2.Green())) {
+        fprintf(stderr, "Pixel values not the same across all color channels!\n");
+      }
+
+      double value = pixel.Red() - pixel2.Red();
+
+      Pixel(i,j).SetGreen(0);
+
+      if (value >= 0) {
+        Pixel(i,j).SetRed(0);
+        Pixel(i,j).SetBlue(value);
+      }
+
+      if (value < 0) {
+        Pixel(i,j).SetRed(-1 * value);
+        Pixel(i,j).SetBlue(0);
+      }
+    }
+  }
 }
 
 void R2Image::
