@@ -1,48 +1,12 @@
-#
-# Unix/Linux makefile for assignment #1
-#
-
-
-
-#
-# List of source files
-#
-
 IMGPRO_SRCS=imgpro.cpp R2Image.cpp R2Pixel.cpp
 IMGPRO_OBJS=$(IMGPRO_SRCS:.cpp=.o)
-
-
-
-#
-# Compile and link options
-#
-
 CC=g++
 CPPFLAGS=-Wall -I. -Ijpeg/linux-src -g -DUSE_JPEG
 LDFLAGS=-g
-
-
-
-#
-# Libraries
-#
-
 LIBS=R2/libR2.a jpeg/libjpeg.a
-
-
-
-#
-# Compile command
-#
 
 %.o: %.cpp
 	$(CC) $(CPPFLAGS) -c $< -o $@
-
-
-
-#
-# Make targets
-#
 
 all: $(LIBS) imgpro
 

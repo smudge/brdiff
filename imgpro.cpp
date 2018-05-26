@@ -1,20 +1,3 @@
-// Assignment 1: Image Processing
-//
-// main.c
-// original by Wagner Correa, 1999
-// modified by Robert Osada, 2000
-// modified by Renato Werneck, 2003
-// modified by Jason Lawrence, 2004
-// modified by Jason Lawrence, 2005
-// modified by Forrester Cole, 2006
-// modified by Tom Funkhouser, 2007
-// modified by Chris DeCoro, 2007
-//
-
-
-
-// Include files
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,8 +15,6 @@ ShowUsage(void)
   exit(EXIT_FAILURE);
 }
 
-
-
 static void
 CheckOption(char *option, int argc, int minargc)
 {
@@ -45,13 +26,15 @@ CheckOption(char *option, int argc, int minargc)
   }
 }
 
-
-
 static int
-ReadCorrespondences(char *filename, R2Segment *&source_segments, R2Segment *&target_segments, int& nsegments)
+ReadCorrespondences(char        *filename,
+                    R2Segment *& source_segments,
+                    R2Segment *& target_segments,
+                    int        & nsegments)
 {
   // Open file
   FILE *fp = fopen(filename, "r");
+
   if (!fp) {
     fprintf(stderr, "Unable to open correspondences file %s\n", filename);
     exit(-1);
@@ -64,8 +47,9 @@ ReadCorrespondences(char *filename, R2Segment *&source_segments, R2Segment *&tar
   }
 
   // Allocate arrays for segments
-  source_segments = new R2Segment [ nsegments ];
-  target_segments = new R2Segment [ nsegments ];
+  source_segments = new R2Segment[nsegments];
+  target_segments = new R2Segment[nsegments];
+
   if (!source_segments || !target_segments) {
     fprintf(stderr, "Unable to allocate correspondence segments for %s\n", filename);
     exit(-1);
@@ -73,9 +57,9 @@ ReadCorrespondences(char *filename, R2Segment *&source_segments, R2Segment *&tar
 
   // Read segments
   for (int i = 0; i <  nsegments; i++) {
-
     // Read source segment
     double sx1, sy1, sx2, sy2;
+
     if (fscanf(fp, "%lf%lf%lf%lf", &sx1, &sy1, &sx2, &sy2) != 4) {
       fprintf(stderr, "Error reading correspondence %d out of %d\n", i, nsegments);
       exit(-1);
@@ -83,6 +67,7 @@ ReadCorrespondences(char *filename, R2Segment *&source_segments, R2Segment *&tar
 
     // Read target segment
     double tx1, ty1, tx2, ty2;
+
     if (fscanf(fp, "%lf%lf%lf%lf", &tx1, &ty1, &tx2, &ty2) != 4) {
       fprintf(stderr, "Error reading correspondence %d out of %d\n", i, nsegments);
       exit(-1);
@@ -100,8 +85,6 @@ ReadCorrespondences(char *filename, R2Segment *&source_segments, R2Segment *&tar
   return 1;
 }
 
-
-
 int
 main(int argc, char **argv)
 {
@@ -113,14 +96,15 @@ main(int argc, char **argv)
   }
 
   // Read input and output image filenames
-  if (argc < 3)  ShowUsage();
+  if (argc < 3) ShowUsage();
   argv++, argc--; // First argument is program name
   char *input_image_1_name = *argv; argv++, argc--;
   char *input_image_2_name = *argv; argv++, argc--;
-  char *output_image_name = *argv; argv++, argc--;
+  char *output_image_name  = *argv; argv++, argc--;
 
   // Allocate image
   R2Image *image1 = new R2Image();
+
   if (!image1) {
     fprintf(stderr, "Unable to allocate image\n");
     exit(-1);
@@ -134,6 +118,7 @@ main(int argc, char **argv)
 
   // Allocate image
   R2Image *image2 = new R2Image();
+
   if (!image2) {
     fprintf(stderr, "Unable to allocate image\n");
     exit(-1);

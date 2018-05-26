@@ -1,10 +1,6 @@
-// Include file for image class
 #ifndef R2_IMAGE_INCLUDED
 #define R2_IMAGE_INCLUDED
 
-
-
-// Constant definitions
 
 typedef enum {
   R2_IMAGE_RED_CHANNEL,
@@ -30,78 +26,97 @@ typedef enum {
 } R2ImageCompositeOperation;
 
 const double PI = 3.141592;
-const double E = 2.71828183;
-
-// Class definition
+const double E  = 2.71828183;
 
 class R2Image {
- public:
+public:
+
   // Constructors/destructor
   R2Image(void);
   R2Image(const char *filename);
-  R2Image(int width, int height);
-  R2Image(int width, int height, const R2Pixel *pixels);
+  R2Image(int width,
+          int height);
+  R2Image(int            width,
+          int            height,
+          const R2Pixel *pixels);
   R2Image(const R2Image& image);
   ~R2Image(void);
 
   // Image properties
-  int NPixels(void) const;
-  int Width(void) const;
-  int Height(void) const;
+  int             NPixels(void) const;
+  int             Width(void) const;
+  int             Height(void) const;
 
   // Pixel access/update
-  R2Pixel& Pixel(int x, int y);
-  R2Pixel *Pixels(void);
-  R2Pixel *Pixels(int row);
-  R2Pixel *operator[](int row);
-  const R2Pixel *operator[](int row) const;
-  void SetPixel(int x, int y,  const R2Pixel& pixel);
+  R2Pixel       & Pixel(int x,
+                        int y);
+  R2Pixel       * Pixels(void);
+  R2Pixel       * Pixels(int row);
+  R2Pixel       * operator[](int row);
+  const R2Pixel * operator[](int row) const;
+  void            SetPixel(int            x,
+                           int            y,
+                           const R2Pixel& pixel);
 
   // Image processing
   R2Image& operator=(const R2Image& image);
 
   // Per-pixel operations
-  void Brighten(double factor);
-  void AddNoise(double factor);
-  void Speckle(double percentage);
-  void ChangeContrast(double factor);
-  void ChangeSaturation(double factor);
-  void Threshold(double value);
-  void ApplyGamma(double factor);
-  void BlackAndWhite();
-  void EqualizeLuminanceHistogram();
+  void     Brighten(double factor);
+  void     AddNoise(double factor);
+  void     Speckle(double percentage);
+  void     ChangeContrast(double factor);
+  void     ChangeSaturation(double factor);
+  void     Threshold(double value);
+  void     ApplyGamma(double factor);
+  void     BlackAndWhite();
+  void     EqualizeLuminanceHistogram();
 
   // Linear filtering operations
-  void Blur(double sigma);
-  void Sharpen(void);
-  void EdgeDetect(void);
+  void     Blur(double sigma);
+  void     Sharpen(void);
+  void     EdgeDetect(void);
 
   // Non-linear filtering operations
-  void MedianFilter(double sigma);
-  void BilateralFilter(double sigmadomain, double sigmarange);
+  void     MedianFilter(double sigma);
+  void     BilateralFilter(double sigmadomain,
+                           double sigmarange);
 
   // Resampling operations
-  void Scale(double sx, double sy, int sampling_method);
-  void Rotate(double angle, int sampling_method);
-  void MotionBlur(R2Vector& motion, int sampling_method);
+  void Scale(double sx,
+             double sy,
+             int    sampling_method);
+  void Rotate(double angle,
+              int    sampling_method);
+  void MotionBlur(R2Vector& motion,
+                  int       sampling_method);
   void Fun(int sampling_method);
 
   // Dithering  operations
-  void Quantize (int nbits);
+  void Quantize(int nbits);
   void RandomDither(int nbits);
   void OrderedDither(int nbits);
   void FloydSteinbergDither(int nbits);
 
   // Miscellaneous operations
-  void Crop(int x, int y,  int w, int h);
+  void Crop(int x,
+            int y,
+            int w,
+            int h);
   void ExtractChannel(int channel);
-  void CopyChannel(const R2Image& from_image, int from_channel, int to_channel);
+  void CopyChannel(const R2Image& from_image,
+                   int            from_channel,
+                   int            to_channel);
   void Add(const R2Image& image);
   void Subtract(const R2Image& image);
-  void Composite(const R2Image& top, int operation);
+  void Composite(const R2Image& top,
+                 int            operation);
   void Morph(const R2Image& target,
-    R2Segment *source_segments, R2Segment *target_segments, int nsegments,
-    double t, int sampling_method);
+             R2Segment     *source_segments,
+             R2Segment     *target_segments,
+             int            nsegments,
+             double         t,
+             int            sampling_method);
 
   // File reading/writing
   int Read(const char *filename);
@@ -110,21 +125,27 @@ class R2Image {
   int ReadJPEG(const char *filename);
   int Write(const char *filename) const;
   int WriteBMP(const char *filename) const;
-  int WritePPM(const char *filename, int ascii = 0) const;
+  int WritePPM(const char *filename,
+               int         ascii = 0) const;
   int WriteJPEG(const char *filename) const;
 
- private:
-  // Utility functions
-  void Resize(int width, int height);
-  R2Pixel Sample(double u, double v,  int sampling_method, double sigma);
+private:
 
- private:
+  // Utility functions
+  void    Resize(int width,
+                 int height);
+  R2Pixel Sample(double u,
+                 double v,
+                 int    sampling_method,
+                 double sigma);
+
+private:
+
   R2Pixel *pixels;
   int npixels;
   int width;
   int height;
 };
-
 
 
 // Inline functions
@@ -136,16 +157,12 @@ NPixels(void) const
   return npixels;
 }
 
-
-
 inline int R2Image::
 Width(void) const
 {
   // Return width
   return width;
 }
-
-
 
 inline int R2Image::
 Height(void) const
@@ -154,19 +171,15 @@ Height(void) const
   return height;
 }
 
-
-
 inline R2Pixel& R2Image::
 Pixel(int x, int y)
 {
   // Return pixel value at (x,y)
   // (pixels start at lower-left and go in row-major order)
-  return pixels[x*height + y];
+  return pixels[x * height + y];
 }
 
-
-
-inline R2Pixel *R2Image::
+inline R2Pixel * R2Image::
 Pixels(void)
 {
   // Return pointer to pixels for whole image
@@ -174,44 +187,34 @@ Pixels(void)
   return pixels;
 }
 
-
-
-inline R2Pixel *R2Image::
+inline R2Pixel * R2Image::
 Pixels(int x)
 {
   // Return pixels pointer for row at x
   // (pixels start at lower-left and go in row-major order)
-  return &pixels[x*height];
+  return &pixels[x * height];
 }
 
-
-
-inline R2Pixel *R2Image::
+inline R2Pixel * R2Image::
 operator[](int x)
 {
   // Return pixels pointer for row at x
   return Pixels(x);
 }
 
-
-
-inline const R2Pixel *R2Image::
+inline const R2Pixel * R2Image::
 operator[](int x) const
 {
   // Return pixels pointer for row at x
   // (pixels start at lower-left and go in row-major order)
-  return &pixels[x*height];
+  return &pixels[x * height];
 }
-
-
 
 inline void R2Image::
 SetPixel(int x, int y, const R2Pixel& pixel)
 {
   // Set pixel
-  pixels[x*height + y] = pixel;
+  pixels[x * height + y] = pixel;
 }
 
-
-
-#endif
+#endif // ifndef R2_IMAGE_INCLUDED

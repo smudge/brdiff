@@ -1,66 +1,72 @@
-// Include file for the pixel class
 #ifndef R2_PIXEL_INCLUDED
 #define R2_PIXEL_INCLUDED
 
-
-// Class definition
-
 class R2Pixel {
- public:
+public:
+
   // Constructor functions
   R2Pixel(void);
   R2Pixel(const R2Pixel& pixel);
-  R2Pixel(double r, double g, double b, double a);
+  R2Pixel(double r,
+          double g,
+          double b,
+          double a);
   R2Pixel(const double rgba[4]);
 
   // Component access functions/operators
-  double Red(void) const;
-  double Green(void) const;
-  double Blue(void) const;
-  double Alpha(void) const;
-  double operator[](int i) const;
+  double  Red(void) const;
+  double  Green(void) const;
+  double  Blue(void) const;
+  double  Alpha(void) const;
+  double  operator[](int i) const;
   double& operator[](int i);
-  double Component(int i) const;
-  double *Components(void);
+  double  Component(int i) const;
+  double* Components(void);
 
   // Property functions/operators
-  double Luminance(void) const;
-  bool IsBlack(void) const;
-  bool IsWhite(void) const;
-  bool operator==(const R2Pixel& pixel) const;
-  bool operator!=(const R2Pixel& pixel) const;
+  double  Luminance(void) const;
+  bool    IsBlack(void) const;
+  bool    IsWhite(void) const;
+  bool    operator==(const R2Pixel& pixel) const;
+  bool    operator!=(const R2Pixel& pixel) const;
 
   // Manipulation functions/operations
-  void SetRed(double red);
-  void SetGreen(double green);
-  void SetBlue(double blue);
-  void SetAlpha(double alpha);
-  void Reset(double red, double green, double blue, double alpha);
-  void Clamp(double maximum_value = 1.0);
+  void    SetRed(double red);
+  void    SetGreen(double green);
+  void    SetBlue(double blue);
+  void    SetAlpha(double alpha);
+  void    Reset(double red,
+                double green,
+                double blue,
+                double alpha);
+  void           Clamp(double maximum_value = 1.0);
 
   // Assignment operators
-  R2Pixel& operator=(const R2Pixel& pixel);
-  R2Pixel& operator+=(const R2Pixel& pixel);
-  R2Pixel& operator-=(const R2Pixel& pixel);
-  R2Pixel& operator*=(const R2Pixel& pixel);
-  R2Pixel& operator*=(double scale);
-  R2Pixel& operator/=(double scale);
+  R2Pixel      & operator=(const R2Pixel& pixel);
+  R2Pixel      & operator+=(const R2Pixel& pixel);
+  R2Pixel      & operator-=(const R2Pixel& pixel);
+  R2Pixel      & operator*=(const R2Pixel& pixel);
+  R2Pixel      & operator*=(double scale);
+  R2Pixel      & operator/=(double scale);
 
   // Arithmetic operations
-  friend R2Pixel operator+(const R2Pixel& pixel1, const R2Pixel& pixel2);
-  friend R2Pixel operator-(const R2Pixel& pixel1, const R2Pixel& pixel2);
-  friend R2Pixel operator*(const R2Pixel& pixel1, const R2Pixel& pixel2);
-  friend R2Pixel operator*(const R2Pixel& pixel, double scale);
-  friend R2Pixel operator*(double scale, const R2Pixel& pixel);
-  friend R2Pixel operator/(const R2Pixel& pixel, double scale);
+  friend R2Pixel operator+(const R2Pixel& pixel1,
+                           const R2Pixel& pixel2);
+  friend R2Pixel operator-(const R2Pixel& pixel1,
+                           const R2Pixel& pixel2);
+  friend R2Pixel operator*(const R2Pixel& pixel1,
+                           const R2Pixel& pixel2);
+  friend R2Pixel operator*(const R2Pixel& pixel,
+                           double         scale);
+  friend R2Pixel operator*(double         scale,
+                           const R2Pixel& pixel);
+  friend R2Pixel operator/(const R2Pixel& pixel,
+                           double         scale);
 
- private:
+private:
+
   double c[4];
 };
-
-
-
-// Public variables
 
 extern R2Pixel R2null_pixel;
 extern R2Pixel R2black_pixel;
@@ -72,63 +78,47 @@ extern R2Pixel R2cyan_pixel;
 extern R2Pixel R2magenta_pixel;
 extern R2Pixel R2white_pixel;
 
-
-
-// Inline functions
-
 inline double R2Pixel::
 Red(void) const
 {
   // Return red component of pixel
-  return(c[0]);
+  return c[0];
 }
-
-
 
 inline double R2Pixel::
 Green(void) const
 {
   // Return green component of pixel
-  return(c[1]);
+  return c[1];
 }
-
-
 
 inline double R2Pixel::
 Blue(void) const
 {
   // Return blue component of pixel
-  return(c[2]);
+  return c[2];
 }
-
-
 
 inline double R2Pixel::
 Alpha(void) const
 {
   // Return alpha component of pixel
-  return(c[3]);
+  return c[3];
 }
 
-
-
-inline double *R2Pixel::
+inline double * R2Pixel::
 Components(void)
 {
   // Return pixel array
   return c;
 }
 
-
-
 inline double R2Pixel::
 Component(int i) const
 {
-  assert((i>=0)&&(i<=3));
-  return(c[i]);
+  assert((i >= 0) && (i <= 3));
+  return c[i];
 }
-
-
 
 inline double R2Pixel::
 operator[](int i) const
@@ -136,34 +126,26 @@ operator[](int i) const
   return Component(i);
 }
 
-
-
 inline double& R2Pixel::
-operator[] (int i)
+operator[](int i)
 {
-  assert((i>=0)&&(i<=3));
-  return(c[i]);
+  assert((i >= 0) && (i <= 3));
+  return c[i];
 }
 
-
-
 inline bool R2Pixel::
-IsBlack (void) const
+IsBlack(void) const
 {
   // Return whether color is black
-  return ((c[0] == 0.0) && (c[1] == 0.0) && (c[2] == 0.0));
+  return (c[0] == 0.0) && (c[1] == 0.0) && (c[2] == 0.0);
 }
-
-
 
 inline bool R2Pixel::
-IsWhite (void) const
+IsWhite(void) const
 {
   // Return whether color is white
-  return ((c[0] == 1.0) && (c[1] == 1.0) && (c[2] == 1.0));
+  return (c[0] == 1.0) && (c[1] == 1.0) && (c[2] == 1.0);
 }
-
-
 
 inline double R2Pixel::
 Luminance(void) const
@@ -172,16 +154,12 @@ Luminance(void) const
   return 0.30 * c[0] + 0.59 * c[1] + 0.11 * c[2];
 }
 
-
-
 inline void R2Pixel::
 SetRed(double red)
 {
   // Set red component
   c[0] = red;
 }
-
-
 
 inline void R2Pixel::
 SetGreen(double green)
@@ -190,16 +168,12 @@ SetGreen(double green)
   c[1] = green;
 }
 
-
-
 inline void R2Pixel::
 SetBlue(double blue)
 {
   // Set blue component
   c[2] = blue;
 }
-
-
 
 inline void R2Pixel::
 SetAlpha(double alpha)
@@ -208,10 +182,8 @@ SetAlpha(double alpha)
   c[3] = alpha;
 }
 
-
-
 inline void R2Pixel::
-Reset (double red, double green, double blue, double alpha)
+Reset(double red, double green, double blue, double alpha)
 {
   // Set all components
   c[0] = red;
@@ -220,23 +192,21 @@ Reset (double red, double green, double blue, double alpha)
   c[3] = alpha;
 }
 
-
-
 inline void R2Pixel::
 Clamp(double maximum_value)
 {
   // Set all components
   if (c[0] > maximum_value) c[0] = maximum_value;
+
   if (c[1] > maximum_value) c[1] = maximum_value;
+
   if (c[2] > maximum_value) c[2] = maximum_value;
+
   if (c[3] > maximum_value) c[3] = maximum_value;
 
-  for( int i=0; i<4; i++ )
-	  if ( c[i] < 0.0 )
-		  c[i] = 0.0;
+  for (int i = 0; i < 4; i++)
+    if (c[i] < 0.0) c[i] = 0.0;
 }
-
-
 
 inline R2Pixel
 operator+(const R2Pixel& pixel1, const R2Pixel& pixel2)
@@ -246,10 +216,9 @@ operator+(const R2Pixel& pixel1, const R2Pixel& pixel2)
   double g = pixel1.c[1] + pixel2.c[1];
   double b = pixel1.c[2] + pixel2.c[2];
   double a = pixel1.c[3];
+
   return R2Pixel(r, g, b, a);
 }
-
-
 
 inline R2Pixel
 operator-(const R2Pixel& pixel1, const R2Pixel& pixel2)
@@ -259,10 +228,9 @@ operator-(const R2Pixel& pixel1, const R2Pixel& pixel2)
   double g = pixel1.c[1] - pixel2.c[1];
   double b = pixel1.c[2] - pixel2.c[2];
   double a = pixel1.c[3];
+
   return R2Pixel(r, g, b, a);
 }
-
-
 
 inline R2Pixel
 operator*(const R2Pixel& pixel1, const R2Pixel& pixel2)
@@ -272,10 +240,9 @@ operator*(const R2Pixel& pixel1, const R2Pixel& pixel2)
   double g = pixel1.c[1] * pixel2.c[1];
   double b = pixel1.c[2] * pixel2.c[2];
   double a = pixel1.c[3];
+
   return R2Pixel(r, g, b, a);
 }
-
-
 
 inline R2Pixel
 operator*(const R2Pixel& pixel, double scale)
@@ -285,18 +252,15 @@ operator*(const R2Pixel& pixel, double scale)
   double g = pixel.c[1] * scale;
   double b = pixel.c[2] * scale;
   double a = pixel.c[3];
+
   return R2Pixel(r, g, b, a);
 }
-
-
 
 inline R2Pixel
 operator*(double scale, const R2Pixel& pixel)
 {
   return pixel * scale;
 }
-
-
 
 inline R2Pixel
 operator/(const R2Pixel& pixel, double scale)
@@ -310,6 +274,4 @@ operator/(const R2Pixel& pixel, double scale)
   return R2Pixel(r, g, b, a);
 }
 
-
-
-#endif
+#endif // ifndef R2_PIXEL_INCLUDED

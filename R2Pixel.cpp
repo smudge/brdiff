@@ -1,9 +1,3 @@
-// Source file for the R2Pixel class
-
-
-
-// Include files
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -13,10 +7,6 @@
 #include <math.h>
 #include <limits.h>
 #include "R2Pixel.h"
-
-
-
-// Public variables
 
 R2Pixel R2null_pixel(0.0, 0.0, 0.0, 1.0);
 R2Pixel R2black_pixel(0.0, 0.0, 0.0, 1.0);
@@ -28,10 +18,6 @@ R2Pixel R2cyan_pixel(0.0, 1.0, 1.0, 1.0);
 R2Pixel R2magenta_pixel(1.0, 0.0, 1.0, 1.0);
 R2Pixel R2white_pixel(1.0, 1.0, 1.0, 1.0);
 
-
-
-// Public functions
-
 R2Pixel::
 R2Pixel(void)
 {
@@ -41,8 +27,6 @@ R2Pixel(void)
   c[2] = 0;
   c[3] = 0;
 }
-
-
 
 R2Pixel::
 R2Pixel(const R2Pixel& pixel)
@@ -54,8 +38,6 @@ R2Pixel(const R2Pixel& pixel)
   c[3] = pixel.c[3];
 }
 
-
-
 R2Pixel::
 R2Pixel(double red, double green, double blue, double alpha)
 {
@@ -65,8 +47,6 @@ R2Pixel(double red, double green, double blue, double alpha)
   c[2] = blue;
   c[3] = alpha;
 }
-
-
 
 R2Pixel::
 R2Pixel(const double rgba[4])
@@ -78,25 +58,21 @@ R2Pixel(const double rgba[4])
   c[3] = rgba[3];
 }
 
-
-
 bool R2Pixel::
 operator==(const R2Pixel& pixel) const
 {
   // Return whether pixel is equal
-  return ((c[0] == pixel.c[0]) && (c[1] == pixel.c[1]) && (c[2] == pixel.c[2]) && (c[3] == pixel.c[3]));
+  return (c[0] == pixel.c[0]) && (c[1] == pixel.c[1]) && (c[2] == pixel.c[2]) &&
+         (c[3] == pixel.c[3]);
 }
-
-
 
 bool R2Pixel::
 operator!=(const R2Pixel& pixel) const
 {
   // Return whether pixel is not equal
-  return ((c[0] != pixel.c[0]) || (c[1] != pixel.c[1]) || (c[2] != pixel.c[2]) || (c[3] != pixel.c[3]));
+  return (c[0] != pixel.c[0]) || (c[1] != pixel.c[1]) || (c[2] != pixel.c[2]) ||
+         (c[3] != pixel.c[3]);
 }
-
-
 
 R2Pixel& R2Pixel::
 operator=(const R2Pixel& pixel)
@@ -109,8 +85,6 @@ operator=(const R2Pixel& pixel)
   return *this;
 }
 
-
-
 R2Pixel& R2Pixel::
 operator+=(const R2Pixel& pixel)
 {
@@ -119,8 +93,6 @@ operator+=(const R2Pixel& pixel)
   c[2] += pixel.c[2];
   return *this;
 }
-
-
 
 R2Pixel& R2Pixel::
 operator-=(const R2Pixel& pixel)
@@ -131,8 +103,6 @@ operator-=(const R2Pixel& pixel)
   return *this;
 }
 
-
-
 R2Pixel& R2Pixel::
 operator*=(const R2Pixel& pixel)
 {
@@ -142,8 +112,6 @@ operator*=(const R2Pixel& pixel)
   return *this;
 }
 
-
-
 R2Pixel& R2Pixel::
 operator*=(double a)
 {
@@ -152,8 +120,6 @@ operator*=(double a)
   c[2] *= a;
   return *this;
 }
-
-
 
 R2Pixel& R2Pixel::
 operator/=(double a)
