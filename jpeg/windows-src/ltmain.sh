@@ -1123,7 +1123,7 @@ if test -z "$show_help"; then
         $run eval "echo timestamp > $libobj" || exit $?
         exit 0
       fi
-
+
       if test -n "$pic_flag"; then
         # Only do commands if we really have different PIC objects.
         reload_objs="$libobjs"

@@ -787,7 +787,7 @@ start_pass_1_quant (j_decompress_ptr cinfo, boolean is_pre_scan)
     ERREXIT(cinfo, JERR_NOT_COMPILED);
     break;
   }
-}
+}
 
 
 /*
