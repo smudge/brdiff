@@ -11,7 +11,7 @@ static void
 ShowUsage(void)
 {
   // Print usage message and exit
-  fprintf(stderr, "Usage: imgpro input_image_1 input_image_2 output_image");
+  fprintf(stderr, "Usage: rbdiff input_image_1 input_image_2 output_image");
   exit(EXIT_FAILURE);
 }
 
