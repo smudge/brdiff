@@ -1,7 +1,3 @@
-#ifndef R2_IMAGE_INCLUDED
-#define R2_IMAGE_INCLUDED
-
-
 typedef enum {
   R2_IMAGE_RED_CHANNEL,
   R2_IMAGE_GREEN_CHANNEL,
@@ -61,62 +57,8 @@ public:
   // Image processing
   R2Image& operator=(const R2Image& image);
 
-  // Per-pixel operations
-  void     Brighten(double factor);
-  void     AddNoise(double factor);
-  void     Speckle(double percentage);
-  void     ChangeContrast(double factor);
-  void     ChangeSaturation(double factor);
-  void     Threshold(double value);
-  void     ApplyGamma(double factor);
   void     BlackAndWhite();
-  void     EqualizeLuminanceHistogram();
-
-  // Linear filtering operations
-  void     Blur(double sigma);
-  void     Sharpen(void);
-  void     EdgeDetect(void);
-
-  // Non-linear filtering operations
-  void     MedianFilter(double sigma);
-  void     BilateralFilter(double sigmadomain,
-                           double sigmarange);
-
-  // Resampling operations
-  void Scale(double sx,
-             double sy,
-             int    sampling_method);
-  void Rotate(double angle,
-              int    sampling_method);
-  void MotionBlur(R2Vector& motion,
-                  int       sampling_method);
-  void Fun(int sampling_method);
-
-  // Dithering  operations
-  void Quantize(int nbits);
-  void RandomDither(int nbits);
-  void OrderedDither(int nbits);
-  void FloydSteinbergDither(int nbits);
-
-  // Miscellaneous operations
-  void Crop(int x,
-            int y,
-            int w,
-            int h);
-  void ExtractChannel(int channel);
-  void CopyChannel(const R2Image& from_image,
-                   int            from_channel,
-                   int            to_channel);
-  void Add(const R2Image& image);
   void Subtract(const R2Image& image);
-  void Composite(const R2Image& top,
-                 int            operation);
-  void Morph(const R2Image& target,
-             R2Segment     *source_segments,
-             R2Segment     *target_segments,
-             int            nsegments,
-             double         t,
-             int            sampling_method);
 
   // File reading/writing
   int Read(const char *filename);
@@ -128,16 +70,6 @@ public:
   int WritePPM(const char *filename,
                int         ascii = 0) const;
   int WriteJPEG(const char *filename) const;
-
-private:
-
-  // Utility functions
-  void    Resize(int width,
-                 int height);
-  R2Pixel Sample(double u,
-                 double v,
-                 int    sampling_method,
-                 double sigma);
 
 private:
 
@@ -216,5 +148,3 @@ SetPixel(int x, int y, const R2Pixel& pixel)
   // Set pixel
   pixels[x * height + y] = pixel;
 }
-
-#endif // ifndef R2_IMAGE_INCLUDED

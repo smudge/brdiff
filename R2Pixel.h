@@ -1,6 +1,3 @@
-#ifndef R2_PIXEL_INCLUDED
-#define R2_PIXEL_INCLUDED
-
 class R2Pixel {
 public:
 
@@ -273,5 +270,3 @@ operator/(const R2Pixel& pixel, double scale)
   double a = pixel.c[3];
   return R2Pixel(r, g, b, a);
 }
-
-#endif // ifndef R2_PIXEL_INCLUDED

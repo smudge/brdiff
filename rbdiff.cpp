@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include "R2/R2.h"
 #include "R2Pixel.h"
 #include "R2Image.h"
 
@@ -13,76 +12,6 @@ ShowUsage(void)
   // Print usage message and exit
   fprintf(stderr, "Usage: rbdiff input_image_1 input_image_2 output_image\n");
   exit(EXIT_FAILURE);
-}
-
-static void
-CheckOption(char *option, int argc, int minargc)
-{
-  // Check if there are enough remaining arguments for option
-  if (argc < minargc)  {
-    fprintf(stderr, "Too few arguments for %s\n", option);
-    ShowUsage();
-    exit(-1);
-  }
-}
-
-static int
-ReadCorrespondences(char        *filename,
-                    R2Segment *& source_segments,
-                    R2Segment *& target_segments,
-                    int        & nsegments)
-{
-  // Open file
-  FILE *fp = fopen(filename, "r");
-
-  if (!fp) {
-    fprintf(stderr, "Unable to open correspondences file %s\n", filename);
-    exit(-1);
-  }
-
-  // Read number of segments
-  if (fscanf(fp, "%d", &nsegments) != 1) {
-    fprintf(stderr, "Unable to read correspondences file %s\n", filename);
-    exit(-1);
-  }
-
-  // Allocate arrays for segments
-  source_segments = new R2Segment[nsegments];
-  target_segments = new R2Segment[nsegments];
-
-  if (!source_segments || !target_segments) {
-    fprintf(stderr, "Unable to allocate correspondence segments for %s\n", filename);
-    exit(-1);
-  }
-
-  // Read segments
-  for (int i = 0; i <  nsegments; i++) {
-    // Read source segment
-    double sx1, sy1, sx2, sy2;
-
-    if (fscanf(fp, "%lf%lf%lf%lf", &sx1, &sy1, &sx2, &sy2) != 4) {
-      fprintf(stderr, "Error reading correspondence %d out of %d\n", i, nsegments);
-      exit(-1);
-    }
-
-    // Read target segment
-    double tx1, ty1, tx2, ty2;
-
-    if (fscanf(fp, "%lf%lf%lf%lf", &tx1, &ty1, &tx2, &ty2) != 4) {
-      fprintf(stderr, "Error reading correspondence %d out of %d\n", i, nsegments);
-      exit(-1);
-    }
-
-    // Add segments to list
-    source_segments[i] = R2Segment(sx1, sy1, sx2, sy2);
-    target_segments[i] = R2Segment(tx1, ty1, tx2, ty2);
-  }
-
-  // Close file
-  fclose(fp);
-
-  // Return success
-  return 1;
 }
 
 int
