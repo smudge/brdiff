@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
+#include <jpeglib.h>
 #include "R2Pixel.h"
 #include "R2Image.h"
 
@@ -703,8 +704,6 @@ extern "C" {
 int R2Image::
 ReadJPEG(const char *filename)
 {
-#ifdef USE_JPEG
-
   // Open file
   FILE *fp = fopen(filename, "rb");
 
@@ -807,19 +806,11 @@ ReadJPEG(const char *filename)
 
   // Return success
   return 1;
-
-#else // ifdef USE_JPEG
-  fprintf(stderr, "JPEG not supported");
-  return 0;
-
-#endif // ifdef USE_JPEG
 }
 
 int R2Image::
 WriteJPEG(const char *filename) const
 {
-#ifdef USE_JPEG
-
   // Open file
   FILE *fp = fopen(filename, "wb");
 
@@ -899,10 +890,4 @@ WriteJPEG(const char *filename) const
 
   // Return number of bytes written
   return 1;
-
-#else // ifdef USE_JPEG
-  fprintf(stderr, "JPEG not supported");
-  return 0;
-
-#endif // ifdef USE_JPEG
 }
