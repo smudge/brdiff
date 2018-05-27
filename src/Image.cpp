@@ -1,6 +1,4 @@
-#include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
@@ -23,7 +21,6 @@ Image(const char *filename)
   width(0),
   height(0)
 {
-  // Read image
   Read(filename);
 }
 
@@ -34,7 +31,6 @@ Image(int width, int height)
   width(width),
   height(height)
 {
-  // Allocate pixels
   pixels = new Pixel[npixels];
   assert(pixels);
 }
@@ -46,11 +42,9 @@ Image(int width, int height, const Pixel *p)
   width(width),
   height(height)
 {
-  // Allocate pixels
   pixels = new Pixel[npixels];
   assert(pixels);
 
-  // Copy pixels
   for (int i = 0; i < npixels; i++) pixels[i] = p[i];
 }
 
@@ -62,50 +56,92 @@ Image(const Image& image)
   height(image.height)
 
 {
-  // Allocate pixels
   pixels = new Pixel[npixels];
   assert(pixels);
 
-  // Copy pixels
   for (int i = 0; i < npixels; i++) pixels[i] = image.pixels[i];
 }
 
 Image::
 ~Image(void)
 {
-  // Free image pixels
   if (pixels) delete[] pixels;
 }
 
 Image& Image::
 operator=(const Image& image)
 {
-  // Delete previous pixels
   if (pixels) { delete[] pixels; pixels = NULL; }
 
-  // Reset width and height
   npixels = image.npixels;
   width   = image.width;
   height  = image.height;
 
-  // Allocate new pixels
   pixels = new Pixel[npixels];
   assert(pixels);
 
-  // Copy pixels
   for (int i = 0; i < npixels; i++) pixels[i] = image.pixels[i];
 
-  // Return image
   return *this;
+}
+
+int Image::
+NPixels(void) const
+{
+  return npixels;
+}
+
+int Image::
+Width(void) const
+{
+  return width;
+}
+
+int Image::
+Height(void) const
+{
+  return height;
+}
+
+Pixel& Image::
+GetPixel(int x, int y)
+{
+  return pixels[x * height + y];
+}
+
+Pixel * Image::
+Pixels(void)
+{
+  return pixels;
+}
+
+Pixel * Image::
+Pixels(int x)
+{
+  return &pixels[x * height];
+}
+
+Pixel * Image::
+operator[](int x)
+{
+  return Pixels(x);
+}
+
+const Pixel * Image::
+operator[](int x) const
+{
+  return &pixels[x * height];
+}
+
+void Image::
+SetPixel(int x, int y, const Pixel& pixel)
+{
+  pixels[x * height + y] = pixel;
 }
 
 void Image::
 BlackAndWhite(void)
 {
-  // Replace each pixel with its luminance value
-  // Put this in each channel,  so the result is grayscale
-
-  // Cycle through the pixels
   for (int i = 0; i < width; i++) {
     for (int j = 0; j < height; j++) {
       double luminance = GetPixel(i, j).Luminance();
@@ -157,11 +193,9 @@ Subtract(const Image& image)
 int Image::
 Read(const char *filename)
 {
-  // Initialize everything
   if (pixels) { delete[] pixels; pixels = NULL; }
   npixels = width = height = 0;
 
-  // Parse input filename extension
   char *input_extension;
 
   if (!(input_extension = (char *)strrchr(filename, '.'))) {
@@ -169,13 +203,11 @@ Read(const char *filename)
     return 0;
   }
 
-  // Read file of appropriate type
   if (!strncmp(input_extension, ".bmp", 4)) return ReadBMP(filename);
   else if (!strncmp(input_extension, ".ppm", 4)) return ReadPPM(filename);
   else if (!strncmp(input_extension, ".jpg", 4)) return ReadJPEG(filename);
   else if (!strncmp(input_extension, ".jpeg", 5)) return ReadJPEG(filename);
 
-  // Should never get here
   fprintf(stderr, "Unrecognized image file extension");
   return 0;
 }
@@ -183,7 +215,6 @@ Read(const char *filename)
 int Image::
 Write(const char *filename) const
 {
-  // Parse input filename extension
   char *input_extension;
 
   if (!(input_extension = (char *)strrchr(filename, '.'))) {
@@ -191,13 +222,11 @@ Write(const char *filename) const
     return 0;
   }
 
-  // Write file of appropriate type
   if (!strncmp(input_extension, ".bmp", 4)) return WriteBMP(filename);
   else if (!strncmp(input_extension, ".ppm", 4)) return WritePPM(filename, 1);
   else if (!strncmp(input_extension, ".jpg", 5)) return WriteJPEG(filename);
   else if (!strncmp(input_extension, ".jpeg", 5)) return WriteJPEG(filename);
 
-  // Should never get here
   fprintf(stderr, "Unrecognized image file extension");
   return 0;
 }

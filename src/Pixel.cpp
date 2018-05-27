@@ -1,27 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <assert.h>
-#include <string.h>
-#include <ctype.h>
-#include <math.h>
-#include <limits.h>
 #include "Pixel.h"
-
-Pixel null_pixel(0.0, 0.0, 0.0, 1.0);
-Pixel black_pixel(0.0, 0.0, 0.0, 1.0);
-Pixel red_pixel(1.0, 0.0, 0.0, 1.0);
-Pixel green_pixel(0.0, 1.0, 0.0, 1.0);
-Pixel blue_pixel(0.0, 0.0, 1.0, 1.0);
-Pixel yellow_pixel(1.0, 1.0, 0.0, 1.0);
-Pixel cyan_pixel(0.0, 1.0, 1.0, 1.0);
-Pixel magenta_pixel(1.0, 0.0, 1.0, 1.0);
-Pixel white_pixel(1.0, 1.0, 1.0, 1.0);
 
 Pixel::
 Pixel(void)
 {
-  // Initialize components to zero
   c[0] = 0;
   c[1] = 0;
   c[2] = 0;
@@ -31,7 +12,6 @@ Pixel(void)
 Pixel::
 Pixel(const Pixel& pixel)
 {
-  // Copy components
   c[0] = pixel.c[0];
   c[1] = pixel.c[1];
   c[2] = pixel.c[2];
@@ -41,7 +21,6 @@ Pixel(const Pixel& pixel)
 Pixel::
 Pixel(double red, double green, double blue, double alpha)
 {
-  // Set components
   c[0] = red;
   c[1] = green;
   c[2] = blue;
@@ -51,82 +30,73 @@ Pixel(double red, double green, double blue, double alpha)
 Pixel::
 Pixel(const double rgba[4])
 {
-  // Set components
   c[0] = rgba[0];
   c[1] = rgba[1];
   c[2] = rgba[2];
   c[3] = rgba[3];
 }
 
-bool Pixel::
-operator==(const Pixel& pixel) const
+double Pixel::
+Red(void) const
 {
-  // Return whether pixel is equal
-  return (c[0] == pixel.c[0]) && (c[1] == pixel.c[1]) && (c[2] == pixel.c[2]) &&
-         (c[3] == pixel.c[3]);
+  return c[0];
 }
 
-bool Pixel::
-operator!=(const Pixel& pixel) const
+double Pixel::
+Green(void) const
 {
-  // Return whether pixel is not equal
-  return (c[0] != pixel.c[0]) || (c[1] != pixel.c[1]) || (c[2] != pixel.c[2]) ||
-         (c[3] != pixel.c[3]);
+  return c[1];
 }
 
-Pixel& Pixel::
-operator=(const Pixel& pixel)
+double Pixel::
+Blue(void) const
 {
-  // Copy components
-  c[0] = pixel.c[0];
-  c[1] = pixel.c[1];
-  c[2] = pixel.c[2];
-  c[3] = pixel.c[3];
-  return *this;
+  return c[2];
 }
 
-Pixel& Pixel::
-operator+=(const Pixel& pixel)
+double Pixel::
+Alpha(void) const
 {
-  c[0] += pixel.c[0];
-  c[1] += pixel.c[1];
-  c[2] += pixel.c[2];
-  return *this;
+  return c[3];
 }
 
-Pixel& Pixel::
-operator-=(const Pixel& pixel)
+double Pixel::
+Luminance(void) const
 {
-  c[0] -= pixel.c[0];
-  c[1] -= pixel.c[1];
-  c[2] -= pixel.c[2];
-  return *this;
+  return 0.30 * c[0] + 0.59 * c[1] + 0.11 * c[2];
 }
 
-Pixel& Pixel::
-operator*=(const Pixel& pixel)
+void Pixel::
+SetRed(double red)
 {
-  c[0] *= pixel.c[0];
-  c[1] *= pixel.c[1];
-  c[2] *= pixel.c[2];
-  return *this;
+  c[0] = red;
 }
 
-Pixel& Pixel::
-operator*=(double a)
+void Pixel::
+SetGreen(double green)
 {
-  c[0] *= a;
-  c[1] *= a;
-  c[2] *= a;
-  return *this;
+  c[1] = green;
 }
 
-Pixel& Pixel::
-operator/=(double a)
+void Pixel::
+SetBlue(double blue)
 {
-  //  assert(!zero(a));
-  c[0] /= a;
-  c[1] /= a;
-  c[2] /= a;
-  return *this;
+  c[2] = blue;
+}
+
+void Pixel::
+SetAlpha(double alpha)
+{
+  c[3] = alpha;
+}
+
+Pixel
+operator-(const Pixel& pixel1, const Pixel& pixel2)
+{
+  double r = pixel1.c[0] - pixel2.c[0];
+  double g = pixel1.c[1] - pixel2.c[1];
+  double b = pixel1.c[2] - pixel2.c[2];
+  double a = pixel1.c[3];
+
+  return Pixel(r, g, b, a);
 }
