@@ -2,16 +2,21 @@ CXX := g++
 CXXFLAGS := -Wall -Weffc++ -pedantic -g
 CXXFLAGS += -MD -MP
 LDFLAGS := -ljpeg
-RBDIFF_SRCS := $(wildcard *.cpp)
-RBDIFF_OBJS := $(RBDIFF_SRCS:.cpp=.o)
+SRC_DIR := ./src
+OBJ_DIR := ./obj
+SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
+OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
 all: rbdiff
 
-rbdiff: $(RBDIFF_OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+rbdiff: $(OBJ_FILES)
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
 	find . -type f \( -name '*.o' -o -name '*.a' -o -name '*.d' \) -delete
 	rm -f rbdiff
 
--include $(SRC:%.c=%.d)
+-include $(OBJ_FILES:%.o=%.d)
