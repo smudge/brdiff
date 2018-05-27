@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include "R2Pixel.h"
-#include "R2Image.h"
+#include "Pixel.h"
+#include "Image.h"
 
 
 static void
@@ -32,7 +32,7 @@ main(int argc, char **argv)
   char *output_image_name  = *argv; argv++, argc--;
 
   // Allocate image
-  R2Image *image1 = new R2Image();
+  Image *image1 = new Image();
 
   if (!image1) {
     fprintf(stderr, "Unable to allocate image\n");
@@ -46,7 +46,7 @@ main(int argc, char **argv)
   }
 
   // Allocate image
-  R2Image *image2 = new R2Image();
+  Image *image2 = new Image();
 
   if (!image2) {
     fprintf(stderr, "Unable to allocate image\n");

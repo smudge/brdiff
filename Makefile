@@ -1,4 +1,4 @@
-RBDIFF_SRCS=rbdiff.cpp R2Image.cpp R2Pixel.cpp
+RBDIFF_SRCS=rbdiff.cpp Image.cpp Pixel.cpp
 RBDIFF_OBJS=$(RBDIFF_SRCS:.cpp=.o)
 
 %.o: %.cpp

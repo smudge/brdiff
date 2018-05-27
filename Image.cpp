@@ -5,19 +5,19 @@
 #include <ctype.h>
 #include <assert.h>
 #include <jpeglib.h>
-#include "R2Pixel.h"
-#include "R2Image.h"
+#include "Pixel.h"
+#include "Image.h"
 
-R2Image::
-R2Image(void)
+Image::
+Image(void)
   : pixels(NULL),
   npixels(0),
   width(0),
   height(0)
 {}
 
-R2Image::
-R2Image(const char *filename)
+Image::
+Image(const char *filename)
   : pixels(NULL),
   npixels(0),
   width(0),
@@ -27,35 +27,35 @@ R2Image(const char *filename)
   Read(filename);
 }
 
-R2Image::
-R2Image(int width, int height)
+Image::
+Image(int width, int height)
   : pixels(NULL),
   npixels(width * height),
   width(width),
   height(height)
 {
   // Allocate pixels
-  pixels = new R2Pixel[npixels];
+  pixels = new Pixel[npixels];
   assert(pixels);
 }
 
-R2Image::
-R2Image(int width, int height, const R2Pixel *p)
+Image::
+Image(int width, int height, const Pixel *p)
   : pixels(NULL),
   npixels(width * height),
   width(width),
   height(height)
 {
   // Allocate pixels
-  pixels = new R2Pixel[npixels];
+  pixels = new Pixel[npixels];
   assert(pixels);
 
   // Copy pixels
   for (int i = 0; i < npixels; i++) pixels[i] = p[i];
 }
 
-R2Image::
-R2Image(const R2Image& image)
+Image::
+Image(const Image& image)
   : pixels(NULL),
   npixels(image.npixels),
   width(image.width),
@@ -63,22 +63,22 @@ R2Image(const R2Image& image)
 
 {
   // Allocate pixels
-  pixels = new R2Pixel[npixels];
+  pixels = new Pixel[npixels];
   assert(pixels);
 
   // Copy pixels
   for (int i = 0; i < npixels; i++) pixels[i] = image.pixels[i];
 }
 
-R2Image::
-~R2Image(void)
+Image::
+~Image(void)
 {
   // Free image pixels
   if (pixels) delete[] pixels;
 }
 
-R2Image& R2Image::
-operator=(const R2Image& image)
+Image& Image::
+operator=(const Image& image)
 {
   // Delete previous pixels
   if (pixels) { delete[] pixels; pixels = NULL; }
@@ -89,7 +89,7 @@ operator=(const R2Image& image)
   height  = image.height;
 
   // Allocate new pixels
-  pixels = new R2Pixel[npixels];
+  pixels = new Pixel[npixels];
   assert(pixels);
 
   // Copy pixels
@@ -99,7 +99,7 @@ operator=(const R2Image& image)
   return *this;
 }
 
-void R2Image::
+void Image::
 BlackAndWhite(void)
 {
   // Replace each pixel with its luminance value
@@ -108,16 +108,16 @@ BlackAndWhite(void)
   // Cycle through the pixels
   for (int i = 0; i < width; i++) {
     for (int j = 0; j < height; j++) {
-      double luminance = Pixel(i, j).Luminance();
-      Pixel(i, j).SetRed(luminance);
-      Pixel(i, j).SetGreen(luminance);
-      Pixel(i, j).SetBlue(luminance);
+      double luminance = GetPixel(i, j).Luminance();
+      GetPixel(i, j).SetRed(luminance);
+      GetPixel(i, j).SetGreen(luminance);
+      GetPixel(i, j).SetBlue(luminance);
     }
   }
 }
 
-void R2Image::
-Subtract(const R2Image& image)
+void Image::
+Subtract(const Image& image)
 {
   if ((width != image.width) || (height != image.height)) {
     fprintf(stderr, "Image height and width do not match\n");
@@ -125,13 +125,13 @@ Subtract(const R2Image& image)
 
   for (int i = 0; i < width; i++) {
     for (int j = 0; j < height; j++) {
-      const R2Pixel& pixel = (*this)[i][j];
+      const Pixel& pixel = (*this)[i][j];
 
       if ((pixel.Red() != pixel.Blue()) || (pixel.Red() != pixel.Green())) {
         fprintf(stderr, "Pixel values not the same across all color channels!\n");
       }
 
-      const R2Pixel& pixel2 = (image)[i][j];
+      const Pixel& pixel2 = (image)[i][j];
 
       if ((pixel2.Red() != pixel2.Blue()) || (pixel2.Red() != pixel2.Green())) {
         fprintf(stderr, "Pixel values not the same across all color channels!\n");
@@ -139,22 +139,22 @@ Subtract(const R2Image& image)
 
       double value = pixel.Red() - pixel2.Red();
 
-      Pixel(i, j).SetGreen(0);
+      GetPixel(i, j).SetGreen(0);
 
       if (value >= 0) {
-        Pixel(i, j).SetRed(0);
-        Pixel(i, j).SetBlue(value);
+        GetPixel(i, j).SetRed(0);
+        GetPixel(i, j).SetBlue(value);
       }
 
       if (value < 0) {
-        Pixel(i, j).SetRed(-1 * value);
-        Pixel(i, j).SetBlue(0);
+        GetPixel(i, j).SetRed(-1 * value);
+        GetPixel(i, j).SetBlue(0);
       }
     }
   }
 }
 
-int R2Image::
+int Image::
 Read(const char *filename)
 {
   // Initialize everything
@@ -180,7 +180,7 @@ Read(const char *filename)
   return 0;
 }
 
-int R2Image::
+int Image::
 Write(const char *filename) const
 {
   // Parse input filename extension
@@ -313,7 +313,7 @@ static void LongWriteLE(int x, FILE *fp)
   char b4 = ((x >> 24) & 0x000000FF); putc(b4, fp);
 }
 
-int R2Image::
+int Image::
 ReadBMP(const char *filename)
 {
   // Open file
@@ -396,7 +396,7 @@ ReadBMP(const char *filename)
   fclose(fp);
 
   // Allocate pixels for image
-  pixels = new R2Pixel[width * height];
+  pixels = new Pixel[width * height];
 
   if (!pixels) {
     fprintf(stderr, "Unable to allocate memory for BMP file");
@@ -412,7 +412,7 @@ ReadBMP(const char *filename)
       double  b = (double)*(p++) / 255;
       double  g = (double)*(p++) / 255;
       double  r = (double)*(p++) / 255;
-      R2Pixel pixel(r, g, b, 1);
+      Pixel pixel(r, g, b, 1);
       SetPixel(i, j, pixel);
     }
   }
@@ -424,7 +424,7 @@ ReadBMP(const char *filename)
   return 1;
 }
 
-int R2Image::
+int Image::
 WriteBMP(const char *filename) const
 {
   // Open file
@@ -483,7 +483,7 @@ WriteBMP(const char *filename) const
 
   for (int j = 0; j < height; j++) {
     for (int i = 0; i < width; i++) {
-      const R2Pixel& pixel = (*this)[i][j];
+      const Pixel& pixel = (*this)[i][j];
       double r             = 255.0 * pixel.Red();
       double g             = 255.0 * pixel.Green();
       double b             = 255.0 * pixel.Blue();
@@ -513,7 +513,7 @@ WriteBMP(const char *filename) const
 // PPM I/O
 ////////////////////////////////////////////////////////////////////////
 
-int R2Image::
+int Image::
 ReadPPM(const char *filename)
 {
   // Open file
@@ -559,7 +559,7 @@ ReadPPM(const char *filename)
   }
 
   // Allocate image pixels
-  pixels = new R2Pixel[width * height];
+  pixels = new Pixel[width * height];
 
   if (!pixels) {
     fprintf(stderr, "Unable to allocate memory for PPM file");
@@ -581,7 +581,7 @@ ReadPPM(const char *filename)
         double  r = (double)getc(fp) / max_value;
         double  g = (double)getc(fp) / max_value;
         double  b = (double)getc(fp) / max_value;
-        R2Pixel pixel(r, g, b, 1);
+        Pixel pixel(r, g, b, 1);
         SetPixel(i, j, pixel);
       }
     }
@@ -604,7 +604,7 @@ ReadPPM(const char *filename)
         double  r = (double)red / max_value;
         double  g = (double)green / max_value;
         double  b = (double)blue / max_value;
-        R2Pixel pixel(r, g, b, 1);
+        Pixel pixel(r, g, b, 1);
         SetPixel(i, j, pixel);
       }
     }
@@ -617,7 +617,7 @@ ReadPPM(const char *filename)
   return 1;
 }
 
-int R2Image::
+int Image::
 WritePPM(const char *filename, int ascii) const
 {
   // Check type
@@ -638,7 +638,7 @@ WritePPM(const char *filename, int ascii) const
 
     for (int j = height - 1; j >= 0; j--) {
       for (int i = 0; i < width; i++) {
-        const R2Pixel& p = (*this)[i][j];
+        const Pixel& p = (*this)[i][j];
         int r            = (int)(255 * p.Red());
         int g            = (int)(255 * p.Green());
         int b            = (int)(255 * p.Blue());
@@ -671,7 +671,7 @@ WritePPM(const char *filename, int ascii) const
 
     for (int j = height - 1; j >= 0; j--) {
       for (int i = 0; i < width; i++) {
-        const R2Pixel& p = (*this)[i][j];
+        const Pixel& p = (*this)[i][j];
         int r            = (int)(255 * p.Red());
         int g            = (int)(255 * p.Green());
         int b            = (int)(255 * p.Blue());
@@ -701,7 +701,7 @@ extern "C" {
 #endif // ifdef USE_JPEG
 
 
-int R2Image::
+int Image::
 ReadJPEG(const char *filename)
 {
   // Open file
@@ -728,7 +728,7 @@ ReadJPEG(const char *filename)
   int ncomponents = cinfo.output_components;
 
   // Allocate pixels for image
-  pixels = new R2Pixel[npixels];
+  pixels = new Pixel[npixels];
 
   if (!pixels) {
     fprintf(stderr, "Unable to allocate memory for BMP file");
@@ -796,7 +796,7 @@ ReadJPEG(const char *filename)
         fprintf(stderr, "Unrecognized number of components in jpeg image: %d\n", ncomponents);
         return 0;
       }
-      R2Pixel pixel(r, g, b, a);
+      Pixel pixel(r, g, b, a);
       SetPixel(i, j, pixel);
     }
   }
@@ -808,7 +808,7 @@ ReadJPEG(const char *filename)
   return 1;
 }
 
-int R2Image::
+int Image::
 WriteJPEG(const char *filename) const
 {
   // Open file
@@ -853,7 +853,7 @@ WriteJPEG(const char *filename) const
     unsigned char *p = &buffer[j * rowsize];
 
     for (int i = 0; i < width; i++) {
-      const R2Pixel& pixel = (*this)[i][j];
+      const Pixel& pixel = (*this)[i][j];
       int r                = (int)(255 * pixel.Red());
       int g                = (int)(255 * pixel.Green());
       int b                = (int)(255 * pixel.Blue());

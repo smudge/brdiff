@@ -1,42 +1,42 @@
 typedef enum {
-  R2_IMAGE_RED_CHANNEL,
-  R2_IMAGE_GREEN_CHANNEL,
-  R2_IMAGE_BLUE_CHANNEL,
-  R2_IMAGE_ALPHA_CHANNEL,
-  R2_IMAGE_NUM_CHANNELS
-} R2ImageChannel;
+  IMAGE_RED_CHANNEL,
+  IMAGE_GREEN_CHANNEL,
+  IMAGE_BLUE_CHANNEL,
+  IMAGE_ALPHA_CHANNEL,
+  IMAGE_NUM_CHANNELS
+} ImageChannel;
 
 typedef enum {
-  R2_IMAGE_POINT_SAMPLING,
-  R2_IMAGE_BILINEAR_SAMPLING,
-  R2_IMAGE_GAUSSIAN_SAMPLING,
-  R2_IMAGE_NUM_SAMPLING_METHODS
-} R2ImageSamplingMethod;
+  IMAGE_POINT_SAMPLING,
+  IMAGE_BILINEAR_SAMPLING,
+  IMAGE_GAUSSIAN_SAMPLING,
+  IMAGE_NUM_SAMPLING_METHODS
+} ImageSamplingMethod;
 
 typedef enum {
-  R2_IMAGE_OVER_COMPOSITION,
-  R2_IMAGE_IN_COMPOSITION,
-  R2_IMAGE_OUT_COMPOSITION,
-  R2_IMAGE_ATOP_COMPOSITION,
-  R2_IMAGE_XOR_COMPOSITION,
-} R2ImageCompositeOperation;
+  IMAGE_OVER_COMPOSITION,
+  IMAGE_IN_COMPOSITION,
+  IMAGE_OUT_COMPOSITION,
+  IMAGE_ATOP_COMPOSITION,
+  IMAGE_XOR_COMPOSITION,
+} ImageCompositeOperation;
 
 const double PI = 3.141592;
 const double E  = 2.71828183;
 
-class R2Image {
+class Image {
 public:
 
   // Constructors/destructor
-  R2Image(void);
-  R2Image(const char *filename);
-  R2Image(int width,
+  Image(void);
+  Image(const char *filename);
+  Image(int width,
           int height);
-  R2Image(int            width,
+  Image(int            width,
           int            height,
-          const R2Pixel *pixels);
-  R2Image(const R2Image& image);
-  ~R2Image(void);
+          const Pixel *pixels);
+  Image(const Image& image);
+  ~Image(void);
 
   // Image properties
   int             NPixels(void) const;
@@ -44,21 +44,20 @@ public:
   int             Height(void) const;
 
   // Pixel access/update
-  R2Pixel       & Pixel(int x,
-                        int y);
-  R2Pixel       * Pixels(void);
-  R2Pixel       * Pixels(int row);
-  R2Pixel       * operator[](int row);
-  const R2Pixel * operator[](int row) const;
+  Pixel       & GetPixel(int x, int y);
+  Pixel       * Pixels(void);
+  Pixel       * Pixels(int row);
+  Pixel       * operator[](int row);
+  const Pixel * operator[](int row) const;
   void            SetPixel(int            x,
                            int            y,
-                           const R2Pixel& pixel);
+                           const Pixel& pixel);
 
   // Image processing
-  R2Image& operator=(const R2Image& image);
+  Image& operator=(const Image& image);
 
   void     BlackAndWhite();
-  void Subtract(const R2Image& image);
+  void Subtract(const Image& image);
 
   // File reading/writing
   int Read(const char *filename);
@@ -73,7 +72,7 @@ public:
 
 private:
 
-  R2Pixel *pixels;
+  Pixel *pixels;
   int npixels;
   int width;
   int height;
@@ -82,36 +81,36 @@ private:
 
 // Inline functions
 
-inline int R2Image::
+inline int Image::
 NPixels(void) const
 {
   // Return total number of pixels
   return npixels;
 }
 
-inline int R2Image::
+inline int Image::
 Width(void) const
 {
   // Return width
   return width;
 }
 
-inline int R2Image::
+inline int Image::
 Height(void) const
 {
   // Return height
   return height;
 }
 
-inline R2Pixel& R2Image::
-Pixel(int x, int y)
+inline Pixel& Image::
+GetPixel(int x, int y)
 {
   // Return pixel value at (x,y)
   // (pixels start at lower-left and go in row-major order)
   return pixels[x * height + y];
 }
 
-inline R2Pixel * R2Image::
+inline Pixel * Image::
 Pixels(void)
 {
   // Return pointer to pixels for whole image
@@ -119,7 +118,7 @@ Pixels(void)
   return pixels;
 }
 
-inline R2Pixel * R2Image::
+inline Pixel * Image::
 Pixels(int x)
 {
   // Return pixels pointer for row at x
@@ -127,14 +126,14 @@ Pixels(int x)
   return &pixels[x * height];
 }
 
-inline R2Pixel * R2Image::
+inline Pixel * Image::
 operator[](int x)
 {
   // Return pixels pointer for row at x
   return Pixels(x);
 }
 
-inline const R2Pixel * R2Image::
+inline const Pixel * Image::
 operator[](int x) const
 {
   // Return pixels pointer for row at x
@@ -142,8 +141,8 @@ operator[](int x) const
   return &pixels[x * height];
 }
 
-inline void R2Image::
-SetPixel(int x, int y, const R2Pixel& pixel)
+inline void Image::
+SetPixel(int x, int y, const Pixel& pixel)
 {
   // Set pixel
   pixels[x * height + y] = pixel;
