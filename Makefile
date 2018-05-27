@@ -1,15 +1,17 @@
-RBDIFF_SRCS=rbdiff.cpp Image.cpp Pixel.cpp
-RBDIFF_OBJS=$(RBDIFF_SRCS:.cpp=.o)
-
-%.o: %.cpp
-	$(CC) $(CPPFLAGS) -c $< -o $@
+CXX := g++
+CXXFLAGS := -Wall -Weffc++ -pedantic -g
+CXXFLAGS += -MD -MP
+LDFLAGS := -ljpeg
+RBDIFF_SRCS := $(wildcard *.cpp)
+RBDIFF_OBJS := $(RBDIFF_SRCS:.cpp=.o)
 
 all: rbdiff
 
-rbdiff: $(LIB) $(RBDIFF_OBJS)
-	g++ -ljpeg -o rbdiff -Wall -I. -g $(RBDIFF_OBJS) -lm
+rbdiff: $(RBDIFF_OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 clean:
-	find . -type f -name '*.o' -delete
-	find . -type f -name '*.a' -delete
+	find . -type f \( -name '*.o' -o -name '*.a' -o -name '*.d' \) -delete
 	rm -f rbdiff
+
+-include $(SRC:%.c=%.d)

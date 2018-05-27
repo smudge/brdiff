@@ -1,6 +1,7 @@
 *~
 *.o
 *.a
+*.d
 rbdiff
 .DS_Store
 tmp/
