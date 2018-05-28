@@ -245,7 +245,7 @@ ReadTIFF(const char *filename)
   TIFF *tif=TIFFOpen(filename, "r");
 
   if (!tif) {
-    fprintf(stderr, "Unable to open image file: %s", filename);
+    fprintf(stderr, "Unable to open image file: %s\n", filename);
     return 0;
   }
 
@@ -257,7 +257,7 @@ ReadTIFF(const char *filename)
   pixels = new Pixel[npixels];
 
   if (!pixels) {
-    fprintf(stderr, "Unable to allocate memory for TIFF file");
+    fprintf(stderr, "Unable to allocate memory for TIFF file\n");
     TIFFClose(tif);
     return 0;
   }
@@ -265,11 +265,16 @@ ReadTIFF(const char *filename)
   uint32 *raster;
   raster=(uint32 *) _TIFFmalloc(npixels *sizeof(uint32));
   if (!raster) {
-    fprintf(stderr, "Unable to allocate temporary memory for TIFF file");
+    fprintf(stderr, "Unable to allocate temporary memory for TIFF file\n");
     TIFFClose(tif);
     return 0;
   }
-  TIFFReadRGBAImage(tif, width, height, raster, 0);
+
+  if (TIFFReadRGBAImage(tif, width, height, raster, 0) != 1) {
+    fprintf(stderr, "Unable to read TIFF file\n");
+    TIFFClose(tif);
+    return 0;
+  }
 
   // Close file
   TIFFClose(tif);
@@ -279,10 +284,10 @@ ReadTIFF(const char *filename)
     for (int i = 0; i < width; i++) {
       double r, g, b, a;
 
-      r = (double)TIFFGetR(raster[i]) / 255;
-      g = (double)TIFFGetG(raster[i]) / 255;
-      b = (double)TIFFGetB(raster[i]) / 255;
-      a = (double)TIFFGetA(raster[i]) / 255;
+      r = (double)TIFFGetR(raster[j * width + i]) / 255;
+      g = (double)TIFFGetG(raster[j * width + i]) / 255;
+      b = (double)TIFFGetB(raster[j * width + i]) / 255;
+      a = (double)TIFFGetA(raster[j * width + i]) / 255;
       Pixel pixel(r, g, b, a);
       SetPixel(i, j, pixel);
     }
