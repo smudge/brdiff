@@ -229,6 +229,8 @@ Write(const char *filename) const
   else if (strcasecmp(input_extension, ".ppm") == 0) return WritePPM(filename, 1);
   else if (strcasecmp(input_extension, ".jpg") == 0) return WriteJPEG(filename);
   else if (strcasecmp(input_extension, ".jpeg") == 0) return WriteJPEG(filename);
+  else if (strcasecmp(input_extension, ".tif") == 0) return WriteTIFF(filename);
+  else if (strcasecmp(input_extension, ".tiff") == 0) return WriteTIFF(filename);
 
   fprintf(stderr, "Unrecognized image file extension");
   return 0;
@@ -297,6 +299,61 @@ ReadTIFF(const char *filename)
   _TIFFfree(raster);
 
   // Return success
+  return 1;
+}
+
+int Image::
+WriteTIFF(const char *filename) const
+{
+  TIFF *out= TIFFOpen(filename, "w");
+  int sampleperpixel = 3; // no alpha channel
+  tsize_t linebytes = sampleperpixel * width;
+
+  // Set image metadata
+  TIFFSetField(out, TIFFTAG_IMAGEWIDTH, width);
+  TIFFSetField(out, TIFFTAG_IMAGELENGTH, height);
+  TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, sampleperpixel);
+  TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 8);
+  TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+  TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+  TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+  TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, TIFFDefaultStripSize(out, width * sampleperpixel));
+
+  // allocate scan line buffer
+  unsigned char *line = NULL;
+  if (TIFFScanlineSize(out) == linebytes)
+    line =(unsigned char *)_TIFFmalloc(linebytes);
+  else
+    line = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
+
+  // Fill buffer with pixels
+  for (int j = 0; j < height; j++) {
+    unsigned char *p = &line[0];
+
+    for (int i = 0; i < width; i++) {
+      const Pixel& pixel = (*this)[i][j];
+      int r = (int)(255 * pixel.Red());
+      int g = (int)(255 * pixel.Green());
+      int b = (int)(255 * pixel.Blue());
+
+      if (r > 255) r = 255;
+      if (g > 255) g = 255;
+      if (b > 255) b = 255;
+
+      *(p++) = (unsigned char)r;
+      *(p++) = (unsigned char)g;
+      *(p++) = (unsigned char)b;
+    }
+    TIFFWriteScanline(out, line, j, 0);
+  }
+
+  // Close file
+  TIFFClose(out);
+
+  // Free buffer
+  _TIFFfree(line);
+
+  // Return number of bytes written
   return 1;
 }
 

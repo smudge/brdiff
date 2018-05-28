@@ -33,6 +33,7 @@ public:
   int WriteBMP(const char *filename) const;
   int WritePPM(const char *filename, int ascii = 0) const;
   int WriteJPEG(const char *filename) const;
+  int WriteTIFF(const char *filename) const;
 
 private:
 
