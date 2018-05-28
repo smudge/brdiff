@@ -720,16 +720,6 @@ WritePPM(const char *filename, int ascii) const
 // JPEG I/O
 ////////////////////////////////////////////////////////////////////////
 
-// #define USE_JPEG
-#ifdef USE_JPEG
-extern "C" {
-# define XMD_H // Otherwise, a conflict with INT32
-# undef FAR    // Otherwise, a conflict with windows.h
-# include "jpeg/jpeglib.h"
-};
-#endif // ifdef USE_JPEG
-
-
 int Image::
 ReadJPEG(const char *filename)
 {
