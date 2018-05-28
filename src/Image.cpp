@@ -141,19 +141,6 @@ SetPixel(int x, int y, const Pixel& pixel)
 }
 
 void Image::
-BlackAndWhite(void)
-{
-  for (int i = 0; i < width; i++) {
-    for (int j = 0; j < height; j++) {
-      double luminance = GetPixel(i, j).Luminance();
-      GetPixel(i, j).SetRed(luminance);
-      GetPixel(i, j).SetGreen(luminance);
-      GetPixel(i, j).SetBlue(luminance);
-    }
-  }
-}
-
-void Image::
 Subtract(const Image& image)
 {
   if ((width != image.width) || (height != image.height)) {
@@ -174,7 +161,8 @@ Subtract(const Image& image)
         fprintf(stderr, "Pixel values not the same across all color channels!\n");
       }
 
-      double value = pixel.Red() - pixel2.Red();
+      Pixel pixdiff = pixel - pixel2;
+      double value = pixdiff.Luminance();
 
       GetPixel(i, j).SetGreen(0);
 

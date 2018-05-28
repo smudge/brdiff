@@ -21,7 +21,6 @@ public:
 
   Image& operator=(const Image& image);
 
-  void BlackAndWhite();
   void Subtract(const Image& image);
 
   int Read(const char *filename);
