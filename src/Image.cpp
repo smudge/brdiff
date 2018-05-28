@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <assert.h>
 #include <jpeglib.h>
+#include <tiffio.h>
 #include "Pixel.h"
 #include "Image.h"
 
@@ -207,6 +208,8 @@ Read(const char *filename)
   else if (strcasecmp(input_extension, ".ppm") == 0) return ReadPPM(filename);
   else if (strcasecmp(input_extension, ".jpg") == 0) return ReadJPEG(filename);
   else if (strcasecmp(input_extension, ".jpeg") == 0) return ReadJPEG(filename);
+  else if (strcasecmp(input_extension, ".tif") == 0) return ReadTIFF(filename);
+  else if (strcasecmp(input_extension, ".tiff") == 0) return ReadTIFF(filename);
 
   fprintf(stderr, "Unrecognized image file extension");
   return 0;
@@ -229,6 +232,67 @@ Write(const char *filename) const
 
   fprintf(stderr, "Unrecognized image file extension");
   return 0;
+}
+
+////////////////////////////////////////////////////////////////////////
+// TIFF I/O
+////////////////////////////////////////////////////////////////////////
+
+int Image::
+ReadTIFF(const char *filename)
+{
+  // Open file
+  TIFF *tif=TIFFOpen(filename, "r");
+
+  if (!tif) {
+    fprintf(stderr, "Unable to open image file: %s", filename);
+    return 0;
+  }
+
+  TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
+  TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
+  npixels = width * height;
+
+  // Allocate pixels for image
+  pixels = new Pixel[npixels];
+
+  if (!pixels) {
+    fprintf(stderr, "Unable to allocate memory for TIFF file");
+    TIFFClose(tif);
+    return 0;
+  }
+
+  uint32 *raster;
+  raster=(uint32 *) _TIFFmalloc(npixels *sizeof(uint32));
+  if (!raster) {
+    fprintf(stderr, "Unable to allocate temporary memory for TIFF file");
+    TIFFClose(tif);
+    return 0;
+  }
+  TIFFReadRGBAImage(tif, width, height, raster, 0);
+
+  // Close file
+  TIFFClose(tif);
+
+  // Assign pixels
+  for (int j = 0; j < height; j++) {
+    for (int i = 0; i < width; i++) {
+      double r, g, b, a;
+
+      r = (double)TIFFGetR(raster[i]) / 255;
+      g = (double)TIFFGetG(raster[i]) / 255;
+      b = (double)TIFFGetB(raster[i]) / 255;
+      a = (double)TIFFGetA(raster[i]) / 255;
+      Pixel pixel(r, g, b, a);
+      SetPixel(i, j, pixel);
+    }
+  }
+
+  // Free unsigned char buffer for reading pixels
+  _TIFFfree(raster);
+
+  // Return success
+  return 1;
 }
 
 ////////////////////////////////////////////////////////////////////////

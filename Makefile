@@ -1,7 +1,7 @@
 CXX := g++
 CXXFLAGS := -Wall -Weffc++ -pedantic -g
 CXXFLAGS += -MD -MP
-LDFLAGS := -ljpeg
+LDFLAGS := -ljpeg -ltiff
 SRC_DIR := ./src
 OBJ_DIR := ./obj
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)

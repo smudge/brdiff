@@ -28,6 +28,7 @@ public:
   int ReadBMP(const char *filename);
   int ReadPPM(const char *filename);
   int ReadJPEG(const char *filename);
+  int ReadTIFF(const char *filename);
   int Write(const char *filename) const;
   int WriteBMP(const char *filename) const;
   int WritePPM(const char *filename, int ascii = 0) const;
