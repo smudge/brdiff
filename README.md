@@ -11,6 +11,18 @@ to help emphasize areas of an object containing a specific material. Unlike a no
 function (resulting in a greyscale output), a red-blue difference will distinguish positive signals
 (blue) from their inverse (red).
 
+## Installing
+
+Grab the [latest release](https://github.com/smudge/rbdiff/releases/latest). As of now, this is
+built for *macOS only* and has no GUI. You'll want to make the binary executable by running this
+command:
+
+```
+chmod +x rbdiff
+```
+
+You may also choose to build from source (instructions below).
+
 ## Usage
 
 ```
