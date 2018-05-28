@@ -203,10 +203,10 @@ Read(const char *filename)
     return 0;
   }
 
-  if (!strncmp(input_extension, ".bmp", 4)) return ReadBMP(filename);
-  else if (!strncmp(input_extension, ".ppm", 4)) return ReadPPM(filename);
-  else if (!strncmp(input_extension, ".jpg", 4)) return ReadJPEG(filename);
-  else if (!strncmp(input_extension, ".jpeg", 5)) return ReadJPEG(filename);
+  if (strcasecmp(input_extension, ".bmp") == 0) return ReadBMP(filename);
+  else if (strcasecmp(input_extension, ".ppm") == 0) return ReadPPM(filename);
+  else if (strcasecmp(input_extension, ".jpg") == 0) return ReadJPEG(filename);
+  else if (strcasecmp(input_extension, ".jpeg") == 0) return ReadJPEG(filename);
 
   fprintf(stderr, "Unrecognized image file extension");
   return 0;
@@ -222,10 +222,10 @@ Write(const char *filename) const
     return 0;
   }
 
-  if (!strncmp(input_extension, ".bmp", 4)) return WriteBMP(filename);
-  else if (!strncmp(input_extension, ".ppm", 4)) return WritePPM(filename, 1);
-  else if (!strncmp(input_extension, ".jpg", 5)) return WriteJPEG(filename);
-  else if (!strncmp(input_extension, ".jpeg", 5)) return WriteJPEG(filename);
+  if (strcasecmp(input_extension, ".bmp") == 0) return WriteBMP(filename);
+  else if (strcasecmp(input_extension, ".ppm") == 0) return WritePPM(filename, 1);
+  else if (strcasecmp(input_extension, ".jpg") == 0) return WriteJPEG(filename);
+  else if (strcasecmp(input_extension, ".jpeg") == 0) return WriteJPEG(filename);
 
   fprintf(stderr, "Unrecognized image file extension");
   return 0;
