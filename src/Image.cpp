@@ -185,6 +185,10 @@ Read(const char *filename)
   if (pixels) { delete[] pixels; pixels = NULL; }
   npixels = width = height = 0;
 
+  // Default TIF headers (set for non-TIFs too in case of TIF output):
+  orientation = ORIENTATION_BOTLEFT;
+  planarconfig = PLANARCONFIG_CONTIG;
+
   char *input_extension;
 
   if (!(input_extension = (char *)strrchr(filename, '.'))) {
@@ -241,6 +245,9 @@ ReadTIFF(const char *filename)
 
   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
+  TIFFGetField(tif, TIFFTAG_ORIENTATION, &orientation);
+  TIFFGetField(tif, TIFFTAG_PLANARCONFIG, &planarconfig);
+
   npixels = width * height;
 
   // Allocate pixels for image
@@ -260,7 +267,7 @@ ReadTIFF(const char *filename)
     return 0;
   }
 
-  if (TIFFReadRGBAImage(tif, width, height, raster, 0) != 1) {
+  if (TIFFReadRGBAImage(tif, width, height, raster, orientation) != 1) {
     fprintf(stderr, "Unable to read TIFF file\n");
     TIFFClose(tif);
     return 0;
@@ -302,8 +309,8 @@ WriteTIFF(const char *filename) const
   TIFFSetField(out, TIFFTAG_IMAGELENGTH, height);
   TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, sampleperpixel);
   TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 8);
-  TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-  TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+  TIFFSetField(out, TIFFTAG_ORIENTATION, orientation);
+  TIFFSetField(out, TIFFTAG_PLANARCONFIG, planarconfig);
   TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
   TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, TIFFDefaultStripSize(out, width * sampleperpixel));
 

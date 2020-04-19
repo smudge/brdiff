@@ -40,4 +40,8 @@ private:
   int npixels;
   int width;
   int height;
+
+  // TIF headers:
+  int orientation;
+  int planarconfig;
 };
