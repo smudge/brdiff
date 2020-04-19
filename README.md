@@ -1,6 +1,6 @@
-# rbdiff
+# brdiff
 
-Subtract two images to create a new red-blue difference image.
+Subtract two images to create a new blue-red difference image.
 
 Pixels will appear blue in places where the first image's _luminance_ was greater than the second,
 and will appear red when the opposite holds true. If the subtracted pixels are close or equal in
@@ -8,17 +8,17 @@ value, the resulting pixel will approach black.
 
 Such an image subtraction function may be useful when performing [multispectral image subtraction](https://www.si.edu/MCIImagingStudio/Multispectral)
 to help emphasize areas of an object containing a specific material. Unlike a normal differencing
-function (resulting in a greyscale output), a red-blue difference will distinguish positive signals
+function (resulting in a greyscale output), a blue-red difference will distinguish positive signals
 (blue) from their inverse (red).
 
 ## Installing
 
-Grab the [latest release](https://github.com/smudge/rbdiff/releases/latest). As of now, this is
+Grab the [latest release](https://github.com/smudge/brdiff/releases/latest). As of now, this is
 built for *macOS only* and has no GUI. You'll want to make the binary executable by running this
 command:
 
 ```
-chmod +x rbdiff
+chmod +x brdiff
 ```
 
 You may also choose to build from source (instructions below).
@@ -26,20 +26,20 @@ You may also choose to build from source (instructions below).
 ## Usage
 
 ```
-usage: rbdiff [--help] <input_image> <subtraction_image> <output_image>
+usage: brdiff [--help] <input_image> <subtraction_image> <output_image>
 ```
 
 Supported input and output formats include BMP, PPM, JPG/JPEG, and TIF/TIFF:
 
 ```
-./rbdiff image_1.jpg image_2.bmp output_image.tif
+./brdiff image_1.jpg image_2.bmp output_image.tif
 ```
 
 The output image **will be overwritten** if it already exists, so be careful, and keep backups.
 
 ## Building Yourself
 
-To build rbdiff locally, simply run `make`. Ensure that you have `libjpeg` and `libtiff` installed
+To build brdiff locally, simply run `make`. Ensure that you have `libjpeg` and `libtiff` installed
 on your system.
 
 ### Building on OS X

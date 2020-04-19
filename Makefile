@@ -7,9 +7,9 @@ OBJ_DIR := ./obj
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
-all: rbdiff
+all: brdiff
 
-rbdiff: $(OBJ_FILES)
+brdiff: $(OBJ_FILES)
 	$(CXX) $(LDFLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
@@ -17,6 +17,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 clean:
 	find . -type f \( -name '*.o' -o -name '*.a' -o -name '*.d' \) -delete
-	rm -f rbdiff
+	rm -f brdiff
 
 -include $(OBJ_FILES:%.o=%.d)

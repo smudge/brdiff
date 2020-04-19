@@ -8,7 +8,7 @@
 static void
 ShowUsage(void)
 {
-  fprintf(stderr, "usage: rbdiff [--help] <input_image> <subtraction_image> <output_image>\n");
+  fprintf(stderr, "usage: brdiff [--help] <input_image> <subtraction_image> <output_image>\n");
   exit(EXIT_FAILURE);
 }
 
