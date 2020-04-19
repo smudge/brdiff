@@ -25,7 +25,8 @@ You may also choose to build from source (instructions below).
 
 ## Usage
 
-To run the command, enter this command, substituting the three arguments with file names:
+To generate a blue-red difference image from two input images, enter this command,
+substituting the three arguments with file names:
 
 ```
 $ ./brdiff --help
@@ -35,13 +36,13 @@ usage:
 
 Supported input and output formats include BMP, PPM, JPG/JPEG, and TIF/TIFF.
 
-Here is an example command using TIF files:
+Here is an example command using `.tif` files:
 
 ```
 ./brdiff image_735nm.tif image_660nm.tif image_br.tif
 ```
 
-You may even mix and match different file types (this is an experimental feature):
+You may even mix and match different file types (an experimental feature!):
 
 ```
 ./brdiff image_735nm.jpg image_660nm.bmp image_br.tif
