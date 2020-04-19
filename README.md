@@ -9,7 +9,7 @@ value, the resulting pixel will approach black.
 Such an image subtraction function may be useful when performing [multispectral image subtraction](https://www.si.edu/MCIImagingStudio/Multispectral)
 to help emphasize areas of an object containing a specific material. Unlike a normal differencing
 function (resulting in a greyscale output), a blue-red difference will distinguish positive signals
-(blue) from their inverse (red).
+(blue) from the inverse (red).
 
 ## Installing
 
@@ -25,14 +25,26 @@ You may also choose to build from source (instructions below).
 
 ## Usage
 
-```
-usage: brdiff [--help] <input_image> <subtraction_image> <output_image>
-```
-
-Supported input and output formats include BMP, PPM, JPG/JPEG, and TIF/TIFF:
+To run the command, enter this command, substituting the three arguments with file names:
 
 ```
-./brdiff image_1.jpg image_2.bmp output_image.tif
+$ ./brdiff --help
+usage:
+  brdiff <base_image> <subtracted_image> <difference_image>
+```
+
+Supported input and output formats include BMP, PPM, JPG/JPEG, and TIF/TIFF.
+
+Here is an example command using TIF files:
+
+```
+./brdiff image_735nm.tif image_660nm.tif image_br.tif
+```
+
+You may even mix and match different file types (this is an experimental feature):
+
+```
+./brdiff image_735nm.jpg image_660nm.bmp image_br.tif
 ```
 
 The output image **will be overwritten** if it already exists, so be careful, and keep backups.
