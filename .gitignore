@@ -1,7 +1,2 @@
-*~
-*.o
-*.a
-*.d
-brdiff
 .DS_Store
-tmp/
+/target
