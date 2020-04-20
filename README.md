@@ -13,15 +13,19 @@ function (resulting in a greyscale output), a blue-red difference will distingui
 
 ## Installing
 
-Grab the [latest release](https://github.com/smudge/brdiff/releases/latest). As of now, this is
-built for *macOS only* and has no GUI. You'll want to make the binary executable by running this
-command:
+First ensure that Rust is installed by following [these instructions](https://doc.rust-lang.org/book/ch01-01-installation.html).
+
+Then, run the following command:
 
 ```
-chmod +x brdiff
+cargo install brdiff
 ```
 
-You may also choose to build from source (instructions below).
+#### Without Cargo/Rust:
+
+You may also [grab the latest release from here](https://github.com/smudge/brdiff/releases/latest) run it manually.
+
+(With this method, you will need to call the command via `./brdiff` instead of `brdiff`, unless you also add its location to your $PATH.)
 
 ## Usage
 
@@ -49,27 +53,6 @@ You may even mix and match different file types (an experimental feature!):
 ```
 
 The output image **will be overwritten** if it already exists, so be careful, and keep backups.
-
-## Building Yourself
-
-To build brdiff locally, simply run `make`. Ensure that you have `libjpeg` and `libtiff` installed
-on your system.
-
-### Building on OS X
-
-On OS X, you can run the following command to install the Xcode Command Line Tools:
-
-```
-xcode-select --install
-```
-
-Then, if you have [homebrew](https://brew.sh/) installed, just run:
-
-```
-brew bundle
-```
-
-This should install `libjpeg` and `libtiff` for you.
 
 ## Contributing
 
