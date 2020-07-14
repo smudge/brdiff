@@ -14,7 +14,7 @@ impl Image {
         Ok(Image { path, image })
     }
 
-    pub fn subtract(&self, sub_image: &Image) -> Result<Image, &str> {
+    pub fn subtract(&self, sub_image: &Image, invert: bool) -> Result<Image, &str> {
         if self.image.dimensions() != sub_image.image.dimensions() {
             return Err("Image dimensions do not match!");
         }
@@ -36,11 +36,22 @@ impl Image {
 
             let luminance = 0.30 * r + 0.59 * g + 0.11 * b;
 
-            if luminance >= 0.0 {
-                *pixel = Rgb([0, 0, luminance as u8]);
+            if luminance < 0.0 {
+                let mut val = -luminance as u8;
+                if invert {
+                    val = 255 - val;
+                    *pixel = Rgb([255, val, val]);
+                } else {
+                    *pixel = Rgb([val, 0, 0]);
+                }
             } else {
-                let luminance = (-luminance) as u8;
-                *pixel = Rgb([luminance, 0, 0]);
+                let mut val = luminance as u8;
+                if invert {
+                    val = 255 - val;
+                    *pixel = Rgb([val, val, 255]);
+                } else {
+                    *pixel = Rgb([0, 0, val]);
+                }
             }
         }
 
