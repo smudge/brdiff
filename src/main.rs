@@ -42,6 +42,6 @@ fn main() {
     output_image.set_path(args[2].clone());
     match output_image.save() {
         Ok(_) => (),
-        Err(e) => eprintln!("Error writing {}:\n{}", args[3], e),
+        Err(e) => eprintln!("Error writing {}:\n{}", args[2], e),
     }
 }
