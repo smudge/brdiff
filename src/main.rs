@@ -4,35 +4,44 @@ use std::process::exit;
 fn show_usage(program: String) {
     eprintln!(
         "usage:
-  {} [--help] <base_image> <subtraction_image> <difference_image>\n",
+  {} [--help] [--invert] <base_image> <subtraction_image> <difference_image>\n",
         program
     );
 }
 
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
-    if args.len() != 4 {
-        show_usage(args[0].clone());
+    let mut invert = false;
+    let mut args: Vec<String> = std::env::args().collect();
+    let program = args[0].clone();
+    args.remove(0);
+
+    if args.len() > 0 && args[0] == "--invert" {
+        args.remove(0);
+        invert = true;
+    }
+
+    if args.len() != 3 {
+        show_usage(program);
         exit(1);
     }
 
-    let base_image = match Image::from_path(args[1].clone()) {
+    let base_image = match Image::from_path(args[0].clone()) {
+        Ok(image) => image,
+        Err(e) => panic!("Error opening {}:\n{}", args[0], e),
+    };
+    let subtraction_image = match Image::from_path(args[1].clone()) {
         Ok(image) => image,
         Err(e) => panic!("Error opening {}:\n{}", args[1], e),
     };
-    let subtraction_image = match Image::from_path(args[2].clone()) {
-        Ok(image) => image,
-        Err(e) => panic!("Error opening {}:\n{}", args[2], e),
-    };
 
-    let mut output_image = match base_image.subtract(&subtraction_image) {
+    let mut output_image = match base_image.subtract(&subtraction_image, invert) {
         Ok(output_image) => output_image,
         Err(e) => panic!("Error subtracting images:\n{}", e),
     };
 
-    output_image.set_path(args[3].clone());
+    output_image.set_path(args[2].clone());
     match output_image.save() {
         Ok(_) => (),
-        Err(e) => eprintln!("Error writing {}:\n{}", args[3], e),
+        Err(e) => eprintln!("Error writing {}:\n{}", args[2], e),
     }
 }
