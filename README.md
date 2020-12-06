@@ -35,7 +35,7 @@ substituting the three arguments with file names:
 ```
 $ ./brdiff --help
 usage:
-  brdiff <base_image> <subtracted_image> <difference_image>
+  brdiff [--help] [--invert] <base_image> <subtraction_image> <difference_image>
 ```
 
 Supported input and output formats include BMP, PPM, JPG/JPEG, and TIF/TIFF.
@@ -46,13 +46,13 @@ Here is an example command using `.tif` files:
 ./brdiff image_735nm.tif image_660nm.tif image_br.tif
 ```
 
-You may even mix and match different file types (an experimental feature!):
+To output an image with a white background (instead of black), use the `--invert` argument:
 
 ```
-./brdiff image_735nm.jpg image_660nm.bmp image_br.tif
+./brdiff --invert image_735nm.jpg image_660nm.jpg image_br_whitebg.jpg
 ```
 
-The output image **will be overwritten** if it already exists, so be careful, and keep backups.
+The output image **will be overwritten** if it already exists, so **be careful, and keep backups**.
 
 ## Contributing
 
