@@ -1,4 +1,4 @@
-import init, { subtract_png } from "./pkg/brdiff.js";
+import init, { subtract_png, tiff_from_png } from "./pkg/brdiff.js";
 
 const form = document.querySelector("#converter");
 const baseInput = document.querySelector("#base");
@@ -9,11 +9,14 @@ const status = document.querySelector("#status");
 const result = document.querySelector("#result");
 const preview = document.querySelector("#preview");
 const download = document.querySelector("#download");
+const downloadTiff = document.querySelector("#download-tiff");
 
 // Large decoded raster images require significantly more memory than file size.
 // Keep the first version conservative; this is not a streaming converter.
 const MAX_FILE_BYTES = 128 * 1024 * 1024;
 let outputUrl = null;
+let tiffUrl = null;
+let differencePng = null;
 
 const ready = init();
 ready.then(() => {
@@ -33,6 +36,10 @@ form.addEventListener("submit", async (event) => {
 
   convertButton.disabled = true;
   result.hidden = true;
+  differencePng = null;
+  if (tiffUrl) URL.revokeObjectURL(tiffUrl);
+  tiffUrl = null;
+  downloadTiff.href = "#";
 
   try {
     await ready;
@@ -47,6 +54,7 @@ form.addEventListener("submit", async (event) => {
     ]);
     const png = subtract_png(new Uint8Array(base), new Uint8Array(subtraction), invertInput.checked);
     const blob = new Blob([png], { type: "image/png" });
+    differencePng = png;
 
     if (outputUrl) URL.revokeObjectURL(outputUrl);
     outputUrl = URL.createObjectURL(blob);
@@ -54,6 +62,7 @@ form.addEventListener("submit", async (event) => {
     download.href = outputUrl;
     const filename = baseFile.name.replace(/\.[^.]+$/, "").replace(/[^a-z0-9_-]+/gi, "-").slice(0, 50) || "image";
     download.download = `brdiff-${filename}.png`;
+    downloadTiff.download = `brdiff-${filename}.tif`;
     result.hidden = false;
     status.textContent = `Done · ${(blob.size / 1024).toFixed(1)} KiB`;
   } catch (error) {
@@ -63,8 +72,27 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
+downloadTiff.addEventListener("click", (event) => {
+  if (!differencePng) {
+    event.preventDefault();
+    return;
+  }
+
+  try {
+    if (!tiffUrl) {
+      const tiff = tiff_from_png(differencePng);
+      tiffUrl = URL.createObjectURL(new Blob([tiff], { type: "image/tiff" }));
+    }
+    downloadTiff.href = tiffUrl;
+  } catch (error) {
+    event.preventDefault();
+    status.textContent = `TIFF encoding failed: ${error}`;
+  }
+});
+
 window.addEventListener("pagehide", () => {
   if (outputUrl) URL.revokeObjectURL(outputUrl);
+  if (tiffUrl) URL.revokeObjectURL(tiffUrl);
 });
 
 // The service worker only caches these local static assets for subsequent visits.

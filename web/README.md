@@ -2,7 +2,7 @@
 
 A static browser UI for `brdiff`. File bytes enter the Rust `image` decoder,
 the original luminance subtraction runs inside WebAssembly, and Rust encodes
-the output as PNG. JavaScript handles only file selection, download, and UI.
+the output as PNG or TIFF. JavaScript handles only file selection, download, and UI.
 The CLI continues to work unchanged.
 
 ## Hosted demo on GitHub Pages
@@ -61,11 +61,11 @@ The old POC cache is migrated once when an updated worker activates.
 
 All image bytes remain in the browser and are passed to WebAssembly. Source
 files and results are **not** uploaded or persisted in browser storage.
-The preview uses a temporary object URL, and the PNG is downloaded locally.
+The PNG preview uses a temporary object URL. PNG or TIFF downloads are generated locally.
 
 ## Scope / limitations
 
-- Two same-sized images in, one PNG out. Invert behaves like `--invert`.
+- Two same-sized images in, PNG preview with PNG or TIFF download. Invert behaves like `--invert`.
 - The Rust `image` crate provides PNG, JPEG, TIFF, BMP and PPM decoding,
   including TIFF even where browser-native image decoding is unavailable.
 - For this POC, each source file is capped at 128 MiB. Decoded rasters can
@@ -73,12 +73,11 @@ The preview uses a temporary object URL, and the PNG is downloaded locally.
   memory. Processing is on the main thread and can temporarily block the UI.
 - As with the existing CLI, inputs are converted to 8-bit RGB before
   subtraction. Higher-bit-depth imaging and metadata are **not** preserved.
-- Only PNG output is exposed. This is an intentionally narrow first step,
-  not a general-purpose image format converter.
+- Output is 8-bit RGB PNG or TIFF; this is not a general-purpose image format converter.
 - JPEG decoding uses the single-threaded decoder in browser WASM; native CLI
   decoding retains its existing multithreaded configuration. The CI workflow
   tests a JPEG through both the native CLI and the built WASM entry point.
 
 The output is bit-for-bit consistent with the CLI's pixel arithmetic
-because `Image::subtract` is shared. Browser byte decoding and PNG encoding
-are new; native tests exercise the byte-oriented path.
+because `Image::subtract` is shared. Browser byte decoding and PNG/TIFF encoding
+are new; native and WASM tests exercise the byte-oriented paths.

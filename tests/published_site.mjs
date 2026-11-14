@@ -8,7 +8,7 @@ const dist = resolve('dist');
 const manifest = JSON.parse(readFileSync(join(dist, 'asset-manifest.json'), 'utf8'));
 const modulePath = join(dist, manifest.assets.find((asset) => /\.js$/.test(asset) && asset.includes('/pkg/')).replace(/^\.\//, ''));
 const wasmPath = join(dist, manifest.assets.find((asset) => /\.wasm$/.test(asset)).replace(/^\.\//, ''));
-const { initSync, subtract_png } = await import(pathToFileURL(modulePath).href);
+const { initSync, subtract_png, tiff_from_png } = await import(pathToFileURL(modulePath).href);
 initSync({ module: readFileSync(wasmPath) });
 
 const fixture = new Uint8Array(Buffer.from(
@@ -25,4 +25,15 @@ test('the published shell imports the fingerprinted browser bundle', () => {
   const app = manifest.assets.find((asset) => /\.js$/.test(asset) && !asset.includes('/pkg/'));
   assert.ok(html.includes('src="' + app + '"'));
   assert.match(readFileSync(join(dist, 'sw.js'), 'utf8'), new RegExp('brdiff-browser-' + manifest.revision));
+});
+
+
+test('the published fingerprinted WASM bundle encodes TIFF', () => {
+  const png = subtract_png(fixture, fixture, false);
+  const tiff = tiff_from_png(png);
+  const header = Array.from(tiff.subarray(0, 4));
+  assert.ok(
+    header.join(',') === '73,73,42,0' || header.join(',') === '77,77,0,42',
+    'valid TIFF header'
+  );
 });

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { initSync, subtract_png } from "../web/pkg/brdiff.js";
+import { initSync, subtract_png, tiff_from_png } from "../web/pkg/brdiff.js";
 
 initSync({ module: readFileSync(new URL("../web/pkg/brdiff_bg.wasm", import.meta.url)) });
 
@@ -21,5 +21,24 @@ test("WASM emits a meaningful error for invalid image bytes", () => {
   assert.throws(
     () => subtract_png(new Uint8Array([1, 2, 3]), jpeg, false),
     /decode base image/i
+  );
+});
+
+
+test("WASM encodes the PNG difference as TIFF", () => {
+  const png = subtract_png(jpeg, jpeg, false);
+  const tiff = tiff_from_png(png);
+  const signature = Array.from(tiff.subarray(0, 4));
+  assert.ok(
+    JSON.stringify(signature) === JSON.stringify([0x49, 0x49, 0x2a, 0x00]) ||
+    JSON.stringify(signature) === JSON.stringify([0x4d, 0x4d, 0x00, 0x2a]),
+    "valid TIFF header"
+  );
+});
+
+test("WASM returns an error for invalid TIFF source bytes", () => {
+  assert.throws(
+    () => tiff_from_png(new Uint8Array([1, 2, 3])),
+    /decode difference image/i
   );
 });

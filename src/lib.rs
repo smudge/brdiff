@@ -37,6 +37,13 @@ impl Image {
         Ok(output.into_inner())
     }
 
+    pub fn to_tiff_bytes(&self) -> Result<Vec<u8>, image::ImageError> {
+        let mut output = Cursor::new(Vec::new());
+        DynamicImage::ImageRgb8(self.image.clone())
+            .write_to(&mut output, ImageOutputFormat::Tiff)?;
+        Ok(output.into_inner())
+    }
+
     pub fn subtract(&self, sub_image: &Image, invert: bool) -> Result<Image, &str> {
         if self.image.dimensions() != sub_image.image.dimensions() {
             return Err("Image dimensions do not match!");
@@ -136,6 +143,15 @@ mod tests {
     fn memory_input_and_png_output_round_trip() {
         let original = solid([25, 50, 75], 2, 1);
         let encoded = original.to_png_bytes().unwrap();
+        let decoded = Image::from_bytes(&encoded).unwrap();
+        assert_eq!(decoded.image.dimensions(), (2, 1));
+        assert_eq!(*decoded.image.get_pixel(1, 0), Rgb([25, 50, 75]));
+    }
+
+    #[test]
+    fn memory_tiff_output_round_trip() {
+        let original = solid([25, 50, 75], 2, 1);
+        let encoded = original.to_tiff_bytes().unwrap();
         let decoded = Image::from_bytes(&encoded).unwrap();
         assert_eq!(decoded.image.dimensions(), (2, 1));
         assert_eq!(*decoded.image.get_pixel(1, 0), Rgb([25, 50, 75]));
