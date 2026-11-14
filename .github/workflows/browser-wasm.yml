@@ -1,0 +1,63 @@
+name: Browser WASM and GitHub Pages
+
+on:
+  push:
+    branches: [master, poc/offline-browser-wasm]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: Test native library
+        run: cargo test
+      - name: Install wasm-pack
+        run: cargo install wasm-pack --locked
+      - name: Build browser WASM
+        run: wasm-pack build --target web --release --out-dir web/pkg
+      - name: Test browser WASM decoding (Node)
+        run: node --test tests/wasm_smoke.mjs
+      - name: Test content-addressed offline bundling
+        run: python3 -m unittest discover -s tests -p test_web_cache.py
+      - name: Prepare static site with hashed assets
+        run: python3 scripts/build_web.py
+      - name: Smoke-test published WASM bundle
+        run: node --test tests/published_site.mjs
+      - name: Upload downloadable browser bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: brdiff-browser
+          path: dist/
+          if-no-files-found: error
+      - name: Package for GitHub Pages
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/
+
+  # Publish only the POC branch until the PR is merged and the deployment
+  # source is deliberately switched to master.
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/poc/offline-browser-wasm'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Publish static site
+        id: deployment
+        uses: actions/deploy-pages@v4

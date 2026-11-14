@@ -6,10 +6,22 @@ Pixels will appear blue in places where the first image's _luminance_ was greate
 and will appear red when the opposite holds true. If the subtracted pixels are close or equal in
 value, the resulting pixel will approach black.
 
-Such an image subtraction function may be useful when performing [multispectral image subtraction](https://www.si.edu/MCIImagingStudio/Multispectral)
+Such an image subtraction function may be useful when performing [multispectral image subtraction](https://mci.si.edu/multispectral-and-hyperspectral-imaging)
 to help emphasize areas of an object containing a specific material. Unlike a normal differencing
 function (resulting in a greyscale output), a blue-red difference will distinguish positive signals
 (blue) from the inverse (red).
+
+## Browser proof of concept
+
+An experimental [WebAssembly browser interface](web/README.md) uses this Rust
+library to subtract two local images without sending their contents to a server.
+It includes a downloadable PNG, an invert option, and a service worker for
+reopening the page offline after the first visit.
+
+The GitHub Pages demo will be available at **https://smudge.github.io/brdiff/**
+once Pages is enabled under the repository's Settings → Pages and a deployment
+has succeeded. Build, deployment and offline usage instructions are in the
+[browser README](web/README.md).
 
 ## Installing
 

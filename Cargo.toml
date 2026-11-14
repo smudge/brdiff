@@ -3,10 +3,22 @@ name = "brdiff"
 version = "0.2.0"
 authors = ["smudge <nathan@ngriffith.com>"]
 edition = "2018"
+# Keep target-specific decoder features separate.
+resolver = "2"
 categories = ["command-line-utilities", "multimedia::images"]
 description = "A command-line tool for subtracting images to generate a new blue-red difference image."
 repository = "https://github.com/smudge/brdiff"
 license = "MIT"
 
-[dependencies]
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+# Preserve existing CLI codecs and multithreaded JPEG decoding.
 image = "0.23"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+# The default jpeg_rayon feature tries to spawn threads on the browser target
+# and traps at runtime. Keep JPEG but disable Rayon for this target only.
+image = { version = "0.23", default-features = false, features = ["bmp", "jpeg", "png", "pnm", "tiff"] }
+wasm-bindgen = "0.2"

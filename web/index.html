@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>brdiff — blue-red image subtraction</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; }
+    body { max-width: 780px; margin: 40px auto; padding: 0 20px; color: #18202a; background: white; }
+    h1 { margin-bottom: 0; }
+    .subtitle { margin-top: 0; color: #526070; }
+    .context { color: #526070; font-size: 0.9em; margin-top: -0.3em; }
+    form { display: grid; gap: 18px; padding: 24px; border: 1px solid #cbd2db; border-radius: 10px; }
+    label { display: block; font-weight: 600; }
+    input[type="file"] { display: block; width: 100%; margin-top: 6px; }
+    .option { display: flex; align-items: center; gap: 8px; }
+    button, .download { padding: 10px 16px; border-radius: 6px; border: 1px solid #304767; }
+    button { background: #304767; color: white; cursor: pointer; }
+    button:disabled { opacity: 0.55; cursor: wait; }
+    .download { display: inline-block; color: #304767; text-decoration: none; font-weight: 600; }
+    #preview { max-width: 100%; max-height: 70vh; border: 1px solid #cbd2db; object-fit: contain; }
+    #status { min-height: 1.5em; }
+    footer { color: #526070; font-size: 0.9em; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>brdiff</h1>
+    <p class="subtitle">Blue-red luminance difference</p>
+    <p>Blue indicates greater luminance in the base image; red indicates greater
+      luminance in the subtraction image. Similar pixel values approach black.</p>
+    <p class="context">Unlike an unsigned grayscale difference, the colors preserve
+      which image was brighter. This can help highlight materials in
+      <a href="https://mci.si.edu/multispectral-and-hyperspectral-imaging">multispectral image subtraction</a>.
+      Both images must have the same dimensions.</p>
+    <form id="converter">
+      <div>
+        <label for="base">Base image</label>
+        <input id="base" type="file" accept=".png,.jpg,.jpeg,.tif,.tiff,.bmp,.ppm" required>
+      </div>
+      <div>
+        <label for="subtraction">Subtraction image</label>
+        <input id="subtraction" type="file" accept=".png,.jpg,.jpeg,.tif,.tiff,.bmp,.ppm" required>
+      </div>
+      <label class="option"><input id="invert" type="checkbox"> White background</label>
+      <button id="convert" type="submit" disabled>Loading…</button>
+    </form>
+    <p id="status" role="status" aria-live="polite">Loading…</p>
+    <section id="result" hidden>
+      <h2>Difference</h2>
+      <p>
+        <a id="download" class="download">Download PNG</a>
+        <a id="download-tiff" class="download" href="#">Download TIFF</a>
+      </p>
+      <img id="preview" alt="Blue-red difference image">
+    </section>
+  </main>
+  <footer>
+    <p>The new image is generated locally. Files are never uploaded.
+      <a href="https://github.com/smudge/brdiff">Source code here.</a></p>
+  </footer>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

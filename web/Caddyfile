@@ -1,0 +1,11 @@
+:8080 {
+    root * /usr/share/caddy
+    encode gzip
+
+    # The service worker and HTML must be revalidated across deploys.
+    header /sw.js Cache-Control "no-cache"
+    header /index.html Cache-Control "no-cache"
+    header / Cache-Control "no-cache"
+
+    file_server
+}
