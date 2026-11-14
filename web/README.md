@@ -10,7 +10,7 @@ The CLI continues to work unchanged.
 The intended address is **https://smudge.github.io/brdiff/**.
 
 The `.github/workflows/browser-wasm.yml` workflow builds the Rust/WASM app
-and publishes the generated `web/` directory using GitHub Pages Actions.
+and publishes the generated `dist/` directory using GitHub Pages Actions.
 During review, publishing is restricted to the
 `poc/offline-browser-wasm` branch: changes to `master` do not deploy the
 POC. After merging the PR, change the deploy job's branch condition to
@@ -35,7 +35,8 @@ rustup target add wasm32-unknown-unknown
 cargo install wasm-pack --locked
 cargo test
 wasm-pack build --target web --release --out-dir web/pkg
-python3 -m http.server 8000 --directory web
+python3 scripts/build_web.py
+python3 -m http.server 8000 --directory dist
 ```
 
 Open http://localhost:8000. Don't open `index.html` using a `file://`
@@ -49,8 +50,14 @@ needed for the generated site; GitHub Pages only serves static files.
 The service worker precaches the HTML, JavaScript, and generated WebAssembly
 files after the first successful visit on HTTPS or localhost. Once installed,
 it lets the site reopen offline. Browsers may evict the cache; the user must
-first visit online again if that happens. To deploy a new version, bump the
-cache version in `sw.js`.
+first visit online again if that happens.
+
+Each build fingerprints the output WASM and JavaScript filenames with SHA-256
+and generates a service-worker cache key from the complete site contents.
+Online navigations fetch current HTML, which references the matching immutable
+assets. Offline navigations use the last fully installed bundle. This happens
+automatically on every build: there are **no manual cache version numbers**.
+The old POC cache is migrated once when an updated worker activates.
 
 All image bytes remain in the browser and are passed to WebAssembly. Source
 files and results are **not** uploaded or persisted in browser storage.

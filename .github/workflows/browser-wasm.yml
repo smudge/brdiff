@@ -26,16 +26,22 @@ jobs:
         run: wasm-pack build --target web --release --out-dir web/pkg
       - name: Test browser WASM decoding (Node)
         run: node --test tests/wasm_smoke.mjs
+      - name: Test content-addressed offline bundling
+        run: python3 -m unittest discover -s tests -p test_web_cache.py
+      - name: Prepare static site with hashed assets
+        run: python3 scripts/build_web.py
+      - name: Smoke-test published WASM bundle
+        run: node --test tests/published_site.mjs
       - name: Upload downloadable browser bundle
         uses: actions/upload-artifact@v4
         with:
           name: brdiff-browser
-          path: web/
+          path: dist/
           if-no-files-found: error
       - name: Package for GitHub Pages
         uses: actions/upload-pages-artifact@v4
         with:
-          path: web/
+          path: dist/
 
   # Publish only the POC branch until the PR is merged and the deployment
   # source is deliberately switched to master.

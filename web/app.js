@@ -71,7 +71,7 @@ window.addEventListener("pagehide", () => {
 // The service worker only caches these local static assets for subsequent visits.
 // It never receives or stores the user's source images.
 if ("serviceWorker" in navigator && window.isSecureContext) {
-  navigator.serviceWorker.register("./sw.js")
+  navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" })
     .then(() => navigator.serviceWorker.ready)
     .then(() => {
       offlineStatus.textContent = "Available offline.";
