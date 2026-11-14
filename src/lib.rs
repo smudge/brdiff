@@ -39,8 +39,8 @@ impl Image {
 
     pub fn to_tiff_bytes(&self) -> Result<Vec<u8>, image::ImageError> {
         let mut output = Cursor::new(Vec::new());
-        DynamicImage::ImageRgb8(self.image.clone())
-            .write_to(&mut output, ImageOutputFormat::Tiff)?;
+        image::codecs::tiff::TiffEncoder::new(&mut output)
+            .encode(self.image.as_raw(), self.image.width(), self.image.height(), image::ColorType::Rgb8)?;
         Ok(output.into_inner())
     }
 
