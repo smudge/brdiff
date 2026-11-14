@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <title>brdiff — offline blue-red image subtraction</title>
+  <title>brdiff — blue-red image subtraction</title>
   <style>
     :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; }
     body { max-width: 780px; margin: 40px auto; padding: 0 20px; color: #18202a; background: white; }
@@ -27,33 +27,30 @@
 <body>
   <main>
     <h1>brdiff</h1>
-    <p class="subtitle">Blue-red image subtraction, entirely in your browser.</p>
-    <p>Select two images of the same dimensions. Blue means the first image is brighter;
-      red means the second is brighter. The result is a downloadable PNG.</p>
+    <p class="subtitle">Blue-red luminance difference</p>
+    <p>Equal-sized images. Blue: first image brighter; red: second image brighter.</p>
     <form id="converter">
       <div>
-        <label for="base">Base image</label>
+        <label for="base">Image A</label>
         <input id="base" type="file" accept=".png,.jpg,.jpeg,.tif,.tiff,.bmp,.ppm" required>
       </div>
       <div>
-        <label for="subtraction">Subtraction image</label>
+        <label for="subtraction">Image B</label>
         <input id="subtraction" type="file" accept=".png,.jpg,.jpeg,.tif,.tiff,.bmp,.ppm" required>
       </div>
-      <label class="option"><input id="invert" type="checkbox"> Invert (white instead of black background)</label>
-      <button id="convert" type="submit" disabled>Loading WebAssembly…</button>
+      <label class="option"><input id="invert" type="checkbox"> White background</label>
+      <button id="convert" type="submit" disabled>Loading…</button>
     </form>
-    <p id="status" role="status" aria-live="polite">Loading image processor…</p>
+    <p id="status" role="status" aria-live="polite">Loading…</p>
     <section id="result" hidden>
-      <h2>Result</h2>
+      <h2>Difference</h2>
       <p><a id="download" class="download">Download PNG</a></p>
       <img id="preview" alt="Blue-red difference image">
     </section>
-    <p id="offline-status">Files remain on your device. Offline installation is available over HTTPS or localhost.</p>
   </main>
   <footer>
-    <p>This page has no server-side conversion, external scripts, or analytics.
-      It uses the same Rust subtraction routine as the
-      <a href="https://github.com/smudge/brdiff">brdiff CLI</a>.</p>
+    <p>Files stay on your device. <span id="offline-status">Works offline after first visit.</span>
+      Uses the same Rust conversion as the <a href="https://github.com/smudge/brdiff">brdiff CLI</a>.</p>
   </footer>
   <script type="module" src="./app.js"></script>
 </body>
