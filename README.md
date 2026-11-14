@@ -6,7 +6,7 @@ Pixels will appear blue in places where the first image's _luminance_ was greate
 and will appear red when the opposite holds true. If the subtracted pixels are close or equal in
 value, the resulting pixel will approach black.
 
-Such an image subtraction function may be useful when performing [multispectral image subtraction](https://www.si.edu/MCIImagingStudio/Multispectral)
+Such an image subtraction function may be useful when performing [multispectral image subtraction](https://mci.si.edu/multispectral-and-hyperspectral-imaging)
 to help emphasize areas of an object containing a specific material. Unlike a normal differencing
 function (resulting in a greyscale output), a blue-red difference will distinguish positive signals
 (blue) from the inverse (red).
