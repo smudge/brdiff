@@ -68,6 +68,9 @@ The preview uses a temporary object URL, and the PNG is downloaded locally.
   subtraction. Higher-bit-depth imaging and metadata are **not** preserved.
 - Only PNG output is exposed. This is an intentionally narrow first step,
   not a general-purpose image format converter.
+- JPEG decoding uses the single-threaded decoder in browser WASM; native CLI
+  decoding retains its existing multithreaded configuration. The CI workflow
+  tests a JPEG through both the native CLI and the built WASM entry point.
 
 The output is bit-for-bit consistent with the CLI's pixel arithmetic
 because `Image::subtract` is shared. Browser byte decoding and PNG encoding
