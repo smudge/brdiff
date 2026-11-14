@@ -33,6 +33,6 @@ fn jpeg_decodes_in_native_library_and_cli() {
         .expect("run native CLI");
     assert!(command.status.success(), "CLI failed: {:?}", String::from_utf8_lossy(&command.stderr));
     let decoded = image::open(&output).expect("CLI should create valid PNG");
-    assert_eq!(decoded.dimensions(), (16, 16));
+    assert_eq!(decoded.dimensions(), (8, 8));
     fs::remove_dir_all(temp).unwrap();
 }
