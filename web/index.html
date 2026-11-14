@@ -21,7 +21,7 @@
     .download { display: inline-block; color: #304767; text-decoration: none; font-weight: 600; }
     #preview { max-width: 100%; max-height: 70vh; border: 1px solid #cbd2db; object-fit: contain; }
     #status { min-height: 1.5em; }
-    #offline-status, footer { color: #526070; font-size: 0.9em; }
+    footer { color: #526070; font-size: 0.9em; }
     [hidden] { display: none !important; }
   </style>
 </head>
@@ -55,8 +55,8 @@
     </section>
   </main>
   <footer>
-    <p>Files stay on your device. <span id="offline-status">Works offline after first visit.</span>
-      Uses the same Rust conversion as the <a href="https://github.com/smudge/brdiff">brdiff CLI</a>.</p>
+    <p>The new image is generated locally. Files are never uploaded.
+      <a href="https://github.com/smudge/brdiff">Source code here.</a></p>
   </footer>
   <script type="module" src="./app.js"></script>
 </body>

@@ -9,7 +9,6 @@ const status = document.querySelector("#status");
 const result = document.querySelector("#result");
 const preview = document.querySelector("#preview");
 const download = document.querySelector("#download");
-const offlineStatus = document.querySelector("#offline-status");
 
 // Large decoded raster images require significantly more memory than file size.
 // Keep the first version conservative; this is not a streaming converter.
@@ -72,11 +71,5 @@ window.addEventListener("pagehide", () => {
 // It never receives or stores the user's source images.
 if ("serviceWorker" in navigator && window.isSecureContext) {
   navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" })
-    .then(() => navigator.serviceWorker.ready)
-    .then(() => {
-      offlineStatus.textContent = "Available offline.";
-    })
-    .catch((error) => {
-      offlineStatus.textContent = `Offline mode unavailable: ${error}`;
-    });
+    .catch((error) => console.warn("Service worker registration failed:", error));
 }
