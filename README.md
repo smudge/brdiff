@@ -11,6 +11,18 @@ to help emphasize areas of an object containing a specific material. Unlike a no
 function (resulting in a greyscale output), a blue-red difference will distinguish positive signals
 (blue) from the inverse (red).
 
+## Browser proof of concept
+
+An experimental [WebAssembly browser interface](web/README.md) uses this Rust
+library to subtract two local images without sending their contents to a server.
+It includes a downloadable PNG, an invert option, and a service worker for
+reopening the page offline after the first visit.
+
+To run it locally or publish it as a static site, follow the
+[browser build instructions](web/README.md). The pull request's GitHub Actions
+build also produces a deployable static-site artifact; no hosted demo is
+configured yet.
+
 ## Installing
 
 First ensure that Rust is installed by following [these instructions](https://doc.rust-lang.org/book/ch01-01-installation.html).
