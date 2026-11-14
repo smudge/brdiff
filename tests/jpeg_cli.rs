@@ -1,4 +1,5 @@
 use brdiff::Image;
+use image::GenericImageView;
 use std::{fs, process::Command};
 
 fn jpeg_fixture() -> Vec<u8> {
