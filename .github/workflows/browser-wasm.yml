@@ -1,10 +1,13 @@
-name: Browser WASM proof of concept
+name: Browser WASM and GitHub Pages
 
 on:
   push:
-    branches: [master]
+    branches: [master, poc/offline-browser-wasm]
   pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -21,14 +24,32 @@ jobs:
         run: cargo install wasm-pack --locked
       - name: Build browser WASM
         run: wasm-pack build --target web --release --out-dir web/pkg
-      - name: Upload complete offline-ready site
+      - name: Upload downloadable browser bundle
         uses: actions/upload-artifact@v4
         with:
           name: brdiff-browser
           path: web/
           if-no-files-found: error
-      - name: Upload generated lockfile for review
-        uses: actions/upload-artifact@v4
+      - name: Package for GitHub Pages
+        uses: actions/upload-pages-artifact@v4
         with:
-          name: cargo-lockfile
-          path: Cargo.lock
+          path: web/
+
+  # Publish only the POC branch until the PR is merged and the deployment
+  # source is deliberately switched to master.
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/poc/offline-browser-wasm'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Publish static site
+        id: deployment
+        uses: actions/deploy-pages@v4

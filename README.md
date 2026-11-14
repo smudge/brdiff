@@ -18,10 +18,10 @@ library to subtract two local images without sending their contents to a server.
 It includes a downloadable PNG, an invert option, and a service worker for
 reopening the page offline after the first visit.
 
-To run it locally or publish it as a static site, follow the
-[browser build instructions](web/README.md). The pull request's GitHub Actions
-build also produces a deployable static-site artifact; no hosted demo is
-configured yet.
+The GitHub Pages demo will be available at **https://smudge.github.io/brdiff/**
+once Pages is enabled under the repository's Settings → Pages and a deployment
+has succeeded. Build, deployment and offline usage instructions are in the
+[browser README](web/README.md).
 
 ## Installing
 

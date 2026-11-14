@@ -5,7 +5,28 @@ the original luminance subtraction runs inside WebAssembly, and Rust encodes
 the output as PNG. JavaScript handles only file selection, download, and UI.
 The CLI continues to work unchanged.
 
-## Build and run
+## Hosted demo on GitHub Pages
+
+The intended address is **https://smudge.github.io/brdiff/**.
+
+The `.github/workflows/browser-wasm.yml` workflow builds the Rust/WASM app
+and publishes the generated `web/` directory using GitHub Pages Actions.
+During review, publishing is restricted to the
+`poc/offline-browser-wasm` branch: changes to `master` do not deploy the
+POC. After merging the PR, change the deploy job's branch condition to
+`refs/heads/master` to maintain the site from the default branch.
+
+Pages must be enabled in this repository at
+**Settings → Pages → Build and deployment → Source: GitHub Actions**.
+Creating a workflow does not itself enable the Pages site; a repository
+owner must do this once. After enabling it, rerun the workflow on the POC
+branch from the Actions tab or push a new commit to that branch.
+
+The GitHub Pages URL includes `/brdiff/`. All local asset references,
+service-worker registration, and cache entries use relative paths so the
+browser works from this project subpath. GitHub Pages uses HTTPS.
+
+## Build and run locally
 
 Install Rust, the `wasm32-unknown-unknown` target, and `wasm-pack`:
 
@@ -20,9 +41,8 @@ python3 -m http.server 8000 --directory web
 Open http://localhost:8000. Don't open `index.html` using a `file://`
 URL; browsers require HTTP(S) to load WASM modules correctly.
 
-The built `web/` directory can be published as a static site, including
-on GitHub Pages. No server, Node.js, bundler, CDN, or runtime network request
-is necessary once the page's assets are available.
+No runtime server, Node.js, bundler, CDN dependency, or upload endpoint is
+needed for the generated site; GitHub Pages only serves static files.
 
 ## Offline and privacy
 
@@ -48,8 +68,6 @@ The preview uses a temporary object URL, and the PNG is downloaded locally.
   subtraction. Higher-bit-depth imaging and metadata are **not** preserved.
 - Only PNG output is exposed. This is an intentionally narrow first step,
   not a general-purpose image format converter.
-- No deployment has been configured. The CI workflow builds a downloadable
-  static-site artifact; hosting can be added separately.
 
 The output is bit-for-bit consistent with the CLI's pixel arithmetic
 because `Image::subtract` is shared. Browser byte decoding and PNG encoding
