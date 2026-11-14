@@ -1,0 +1,34 @@
+name: Browser WASM proof of concept
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: Test native library
+        run: cargo test
+      - name: Install wasm-pack
+        run: cargo install wasm-pack --locked
+      - name: Build browser WASM
+        run: wasm-pack build --target web --release --out-dir web/pkg
+      - name: Upload complete offline-ready site
+        uses: actions/upload-artifact@v4
+        with:
+          name: brdiff-browser
+          path: web/
+          if-no-files-found: error
+      - name: Upload generated lockfile for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: cargo-lockfile
+          path: Cargo.lock
