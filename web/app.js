@@ -19,8 +19,8 @@ let outputUrl = null;
 const ready = init();
 ready.then(() => {
   convertButton.disabled = false;
-  convertButton.textContent = "Create difference image";
-  status.textContent = "Ready. Select two images to begin.";
+  convertButton.textContent = "Convert";
+  status.textContent = "";
 }).catch((error) => {
   status.textContent = `Unable to load WebAssembly: ${error}`;
   convertButton.textContent = "WebAssembly unavailable";
@@ -38,10 +38,10 @@ form.addEventListener("submit", async (event) => {
   try {
     await ready;
     if (baseFile.size > MAX_FILE_BYTES || subtractionFile.size > MAX_FILE_BYTES) {
-      throw new Error("Each source image must be at most 128 MiB for this proof of concept.");
+      throw new Error("Each image must be 128 MiB or smaller.");
     }
 
-    status.textContent = "Reading and processing images locally…";
+    status.textContent = "Processing…";
     const [base, subtraction] = await Promise.all([
       baseFile.arrayBuffer(),
       subtractionFile.arrayBuffer(),
@@ -56,7 +56,7 @@ form.addEventListener("submit", async (event) => {
     const filename = baseFile.name.replace(/\.[^.]+$/, "").replace(/[^a-z0-9_-]+/gi, "-").slice(0, 50) || "image";
     download.download = `brdiff-${filename}.png`;
     result.hidden = false;
-    status.textContent = `Complete. PNG size: ${(blob.size / 1024).toFixed(1)} KiB.`;
+    status.textContent = `Done · ${(blob.size / 1024).toFixed(1)} KiB`;
   } catch (error) {
     status.textContent = `Conversion failed: ${error}`;
   } finally {
@@ -74,9 +74,9 @@ if ("serviceWorker" in navigator && window.isSecureContext) {
   navigator.serviceWorker.register("./sw.js")
     .then(() => navigator.serviceWorker.ready)
     .then(() => {
-      offlineStatus.textContent = "Offline ready: after this first visit, the app can load without a network connection.";
+      offlineStatus.textContent = "Available offline.";
     })
     .catch((error) => {
-      offlineStatus.textContent = `Offline caching unavailable: ${error}`;
+      offlineStatus.textContent = `Offline mode unavailable: ${error}`;
     });
 }

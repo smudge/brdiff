@@ -1,6 +1,6 @@
 // Cache the complete static app so it can be opened again while offline.
 // Bump this name when deploying updated JS or WebAssembly files.
-const CACHE = "brdiff-browser-poc-v1";
+const CACHE = "brdiff-browser-poc-v2";
 const ASSETS = [
   "./",
   "./index.html",
