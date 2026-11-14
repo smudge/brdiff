@@ -10,6 +10,7 @@
     body { max-width: 780px; margin: 40px auto; padding: 0 20px; color: #18202a; background: white; }
     h1 { margin-bottom: 0; }
     .subtitle { margin-top: 0; color: #526070; }
+    .context { color: #526070; font-size: 0.9em; margin-top: -0.3em; }
     form { display: grid; gap: 18px; padding: 24px; border: 1px solid #cbd2db; border-radius: 10px; }
     label { display: block; font-weight: 600; }
     input[type="file"] { display: block; width: 100%; margin-top: 6px; }
@@ -28,14 +29,19 @@
   <main>
     <h1>brdiff</h1>
     <p class="subtitle">Blue-red luminance difference</p>
-    <p>Equal-sized images. Blue: first image brighter; red: second image brighter.</p>
+    <p>Blue indicates greater luminance in the base image; red indicates greater
+      luminance in the subtraction image. Similar pixel values approach black.</p>
+    <p class="context">Unlike an unsigned grayscale difference, the colors preserve
+      which image was brighter. This can help highlight materials in
+      <a href="https://www.si.edu/MCIImagingStudio/Multispectral">multispectral image subtraction</a>.
+      Both images must have the same dimensions.</p>
     <form id="converter">
       <div>
-        <label for="base">Image A</label>
+        <label for="base">Base image</label>
         <input id="base" type="file" accept=".png,.jpg,.jpeg,.tif,.tiff,.bmp,.ppm" required>
       </div>
       <div>
-        <label for="subtraction">Image B</label>
+        <label for="subtraction">Subtraction image</label>
         <input id="subtraction" type="file" accept=".png,.jpg,.jpeg,.tif,.tiff,.bmp,.ppm" required>
       </div>
       <label class="option"><input id="invert" type="checkbox"> White background</label>
